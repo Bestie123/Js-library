@@ -1,7 +1,6 @@
   (async () => {
 	  
-	  GetAllFollowedRoomListInDB
-	      ObjectFollowedList={} // записываем все объекты в объект в оперативную память для воможно более быстрого доступа при переборе комнат
+	        ObjectFollowedList={} // записываем все объекты в объект в оперативную память для воможно более быстрого доступа при переборе комнат
 FollowedList.forEach(function(item){ObjectFollowedList[item.id]=item.FollowedCategory})
 	  
    // создание списка подключений
