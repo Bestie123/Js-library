@@ -38,7 +38,10 @@ FollowedCategoryList[FollowedList[item[0]]]=[];
 console.log(e.data[1]) // ответ с подписками
 }else if(e.data[0]=='RetSetFollowdRoomListInDB'){
 console.log(e.data[1]) // ответ true если подписка успешно сохранена	
+}else if(e.data[0]=='RetDeleteFollowdRoomListInDB'){
+console.log(e.data[1]) // ответ true если подписка успешно удалена	
 }
+		    
 })
         }
 	}, false);
