@@ -1,4 +1,9 @@
   (async () => {
+	  
+	  GetAllFollowedRoomListInDB
+	      ObjectFollowedList={} // записываем все объекты в объект в оперативную память для воможно более быстрого доступа при переборе комнат
+FollowedList.forEach(function(item){ObjectFollowedList[item.id]=item.FollowedCategory})
+	  
    // создание списка подключений
 // удаление подключения при закрытии страницы
 // запрос онлайн комнат и возвращение списка
@@ -30,6 +35,10 @@ FollowedCategoryList[FollowedList[item[0]]]=[];
   FollowedCategoryList[ObjectFollowedList[item[0]]].push(item)  //вносим в категорию комнату и ее html код
   // + сортировка по категориям
     //сортировка комнат в блоки с категориями
+}else if(e.data[0]=='RetGetAllFollowedRoomListInDB'){
+console.log(e.data[1]) // ответ с подписками
+}else if(e.data[0]=='RetSetFollowdRoomListInDB'){
+console.log(e.data[1]) // ответ true если подписка успешно сохранена	
 }
 })
         }
