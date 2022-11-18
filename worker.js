@@ -1,7 +1,7 @@
   (async () => {
 	  
 	        ObjectFollowedList={} // записываем все объекты в объект в оперативную память для воможно более быстрого доступа при переборе комнат
-FollowedList.forEach(function(item){ObjectFollowedList[item.id]=item.FollowedCategory})
+//FollowedList.forEach(function(item){ObjectFollowedList[item.id]=item.FollowedCategory})
 	  
    // создание списка подключений
 // удаление подключения при закрытии страницы
