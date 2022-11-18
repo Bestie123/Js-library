@@ -51,7 +51,7 @@ console.log(e.data[1]) // ответ true если подписка успешн
 }, false);
 
   setInterval(function(){
-            PageList[Object.keys(PageList)[0]].postMessage(['GetRoomList']);
+            PageList[Object.keys(PageList)[0]].postMessage(['DB','GetRoomList']);
 //port.postMessage(['GetRoomList']);
         },30000)
             })();
