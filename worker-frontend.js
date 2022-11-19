@@ -75,45 +75,6 @@ function GetRoomList(e){
             e.currentTarget.postMessage(['RoomList', RoomList])
 }
 
-/*
-    db = new Dexie('Bestie123');
-
-    db.version(1).stores({
-        FollowedList: 'id'
-    });
-
-    FollowedList = await db.FollowedList.toArray() // получаем массив всех объектов в хранилище
-
-    ObjectFollowedList = {} // записываем все объекты в объект в оперативную память для воможно более быстрого доступа при переборе комнат
-    FollowedList.forEach(function(item) {
-        ObjectFollowedList[item.id] = item.FollowedCategory
-    })
-
-    //db.FollowedList.toArray().then(function(e){console.log(e)});
-
-
-    // оба  способа могут добавить запись  в хранилище но только второй может ее изменить
-    //db.FollowedList.add({id: 'one', FollowecCategory: 1});
-    db.FollowedList.put({
-        id: 'three',
-        data: 3
-    });
-
-    // получить значение по первичному ключу
-    //const result = await db.FollowedList.get('three'); //!!!!!!!!!!!!!!!в tampermonkey такая конструкция выдает ошибку
-    //db.FollowedList.get('three').then(function(e){console.log(e)});
-
-    //получить все значения в хранилище
-    db.FollowedList.toArray().then(function(e) {
-        console.log(e)
-    });
-
-
-    // получить значение по индексу
-    //const contact = await db.FollowedList.where('hobbies').equals('Cycling').first();
-
-*/
-
 
     var url = 'data:application/x-javascript;base64,' + btoa(unescape(encodeURIComponent(a1)));
     var worker = new SharedWorker(url);
@@ -136,7 +97,7 @@ function GetRoomList(e){
 
     // post a message to the shared web worker
     worker.port.postMessage("Alyssa");
-
+return worker
 })();
 
 
