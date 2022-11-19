@@ -66,7 +66,7 @@
 
         }, false);
 
-    PageList[Object.keys(PageList)[0]].postMessage(['GetAllFollowedRoomListInDB']); //запрос на получение всех подписок из базы данных
+    PageList[Object.keys(PageList)[0]].postMessage(['DB','GetAllFollowedRoomListInDB']); //запрос на получение всех подписок из базы данных
     
     setInterval(function() {
         PageList[Object.keys(PageList)[0]].postMessage(['GetRoomList']);
