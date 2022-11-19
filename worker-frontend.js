@@ -64,7 +64,7 @@
     }
 
 function GetRoomList(e){
- var a1 = httpGet(!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+ var a1 = httpGet('https://chaturbate.com/');
             var el = document.createElement('html');
             el.innerHTML = a1
             var a2 = el.getElementsByClassName('room_list_room') // получаем список комнат
