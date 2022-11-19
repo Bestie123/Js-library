@@ -11,12 +11,15 @@
         switch (e.data[1]) {
             case 'RetGetAllFollowedRoomListInDB': {
                 console.log(e.data[2]) // ответ с подписками
+                 break;
             }
             case 'RetSetFollowdRoomListInDB': {
                 console.log(e.data[2]) // ответ true если подписка успешно сохранена
+                 break;
             }
             case 'RetDeleteFollowdRoomListInDB': {
                 console.log(e.data[2]) // ответ true если подписка успешно удалена
+                 break;
             }
         }
     }
