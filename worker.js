@@ -66,7 +66,7 @@
         }, false);
 
     setInterval(function() {
-        PageList[Object.keys(PageList)[0]].postMessage(['DB', 'GetRoomList']);
+        PageList[Object.keys(PageList)[0]].postMessage(['GetRoomList']);
         //port.postMessage(['GetRoomList']);
     }, 30000)
 })();
