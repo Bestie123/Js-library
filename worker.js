@@ -5,13 +5,17 @@
     var connections = 0;
     var FollowedList = {};
     var FollowedCategoryList = {}; //список категорий с отсортированными комнатами для онлайн запроса
-
+    var sortedCategoryFollow={arr:[],obj:{}}; //упорядоченный список категорий и объект с  айди категорий для проверки совпадает ли категория онлайн комнаты с установленными категориями
     function Roomif(e) {
         switch (e.data[1]) {
             case 'RetGetAllFollowedRoomListInDB': {
-                console.log(e.data[2]) // ответ с подписками
-                 e.data[2].forEach(function(item){ObjectFollowedList[item.id]=item.FollowedCategory})
-
+                console.log(e.data) // ответ с подписками  и категориями
+                 
+                e.data[2].forEach(function(item){})ObjectFollowedList[item.id]=item.FollowedCategory})
+sortedCategoryFollow.arr=e.data[3];
+                e.data[3].forEach(function(item){ sortedCategoryFollow.obj[item]=''}
+})
+                
                  break;
             }
             case 'RetSetFollowdRoomListInDB': {
