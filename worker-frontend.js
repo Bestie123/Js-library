@@ -1,10 +1,5 @@
 (async () => {
-
-    window.onbeforeunload = function() { // отправять сообщение о закрытии страницы воркеру чтоб удалить порт
-        worker.port.postMessage(["ClosePage"]);
-    }
-
-    var a1 = httpGet('https://raw.githubusercontent.com/Bestie123/Js-library/main/dexie.js');
+     var a1 = httpGet('https://raw.githubusercontent.com/Bestie123/Js-library/main/dexie.js');
     eval(a1);
     var a1 = httpGet('https://raw.githubusercontent.com/Bestie123/Js-library/main/worker.js'); // код воркера
     function httpGet(theUrl) {
@@ -64,7 +59,7 @@
     }
 
 function GetRoomList(e){
- var a1 = httpGet('https://chaturbate.com/');
+ var a1 = httpGet('https://chaturbate.com/'); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ссылка демонстрационная  и не подходит для полноценной работы расширения. Для правильной работы необходимо использовать запрос на все онлайн комнаты. Запрос убран в целях нераспространения
             var el = document.createElement('html');
             el.innerHTML = a1
             var a2 = el.getElementsByClassName('room_list_room') // получаем список комнат
@@ -78,6 +73,9 @@ function GetRoomList(e){
 
     var url = 'data:application/x-javascript;base64,' + btoa(unescape(encodeURIComponent(a1)));
     var worker = new SharedWorker(url);
+    window.onbeforeunload = function() { // отправять сообщение о закрытии страницы воркеру чтоб удалить порт // вешать событие на закрытие страницы, при возникновении отослать сообщение на закрытие канала
+        worker.port.postMessage(["ClosePage"]);
+    }
     worker.port.addEventListener("message", function(e) { //прием сообщений от воркера
                         console.log(e);
 
