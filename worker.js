@@ -50,6 +50,7 @@ sortedCategoryFollow.arr=e.data[3];
                 // удаление подключения при закрытии страницы
                 // запрос онлайн комнат и возвращение списка
                 self.addEventListener("connect", function(e) { //отслеживание подключения новых вкладок
+                    console.log(e)
                         var port = e.ports[0];
                         port.number = connections;
                         PageList[connections] = port
