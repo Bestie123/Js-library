@@ -11,7 +11,7 @@
             case 'RetGetAllFollowedRoomListInDB': {
                 console.log(e.data) // ответ с подписками  и категориями
                  
-                e.data[2].forEach(function(item){})ObjectFollowedList[item.id]=item.FollowedCategory})
+                e.data[2].forEach(function(item){ObjectFollowedList[item.id]=item.FollowedCategory})
 sortedCategoryFollow.arr=e.data[3];
                 e.data[3].forEach(function(item){ sortedCategoryFollow.obj[item]=''}
 })
