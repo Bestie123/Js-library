@@ -76,6 +76,7 @@ function GetRoomList(e){
 
     var url = 'data:application/x-javascript;base64,' + btoa(unescape(encodeURIComponent(a1)));
     var worker = new SharedWorker(url);
+     AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=worker; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     window.onbeforeunload = function() { // отправять сообщение о закрытии страницы воркеру чтоб удалить порт // вешать событие на закрытие страницы, при возникновении отослать сообщение на закрытие канала
         worker.port.postMessage(["ClosePage"]);
     }
