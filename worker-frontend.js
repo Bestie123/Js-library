@@ -31,6 +31,7 @@
  break;
             }
             case 'SetFollowdRoomListInDB': { // запрос на запись подписки в базу данных
+                 console.log(111111)
                 db.FollowedList.put({
                     id: e.data[2].id,
                     FollowedCategory: e.data[2].FollowedCategory
