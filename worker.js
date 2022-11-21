@@ -26,7 +26,8 @@ sortedCategoryFollow.arr=e.data[3];
                  break;
             }
                 case 'SetFollowdRoomListInDB': { // запрос на запись подписки в базу данных, переадрисовываем запрос от страницы к текущей рабочей странице
-                    PageList[Object.keys(PageList)[0]].postMessage(['DB','SetFollowdRoomListInDB',e.data[2]]);
+                    //также пересылаем порт для создания прямой связи между запрашивающей и рабочей страницей
+                    PageList[Object.keys(PageList)[0]].postMessage(['DB','SetFollowdRoomListInDB',e.data[2],[e.data[3]]]); 
                 console.log(e.data[2]) // ответ true если подписка успешно удалена
                  break;
             }
