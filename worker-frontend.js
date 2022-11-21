@@ -64,11 +64,11 @@ console.log(e);
                    case 'SetNewCategoy' : { // запрос на добавление новой категории в базу данных
                db.SortedCategoryFollowed.get("SortedCategory").then(function(categorylist){ 
                     console.log(categorylist);
-                    categorylist = categorylist==undefined ?[]:categorylist
-                    categorylist.data.push(e.data[2])
+                    categorylist = categorylist==undefined ?[]:categorylist.data
+                    categorylist.push(e.data[2])
              db.SortedCategoryFollowed.put({
                     id: 'SortedCategory',
-                    data: categorylist.data
+                    data: categorylist
                 }).then(function(val) {
                                       console.log(val);
                     console.log(e)
