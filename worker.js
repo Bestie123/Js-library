@@ -34,6 +34,7 @@ sortedCategoryFollow.arr=e.data[3];
             }
             case 'SetNewCategoy' : { // запрос на добавление новой категории в базу данных, переадрисовываем запрос от страницы к текущей рабочей странице
             PageList[Object.keys(PageList)[0]].postMessage(['DB','SetNewCategoy',e.data[2]],[e.ports[0]]);
+                break;
             }
         }
     }
