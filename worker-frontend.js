@@ -61,8 +61,7 @@ console.log(e);
                 })
                  break;
             }
-        }
-          case 'SetNewCategoy' : { // запрос на добавление новой категории в базу данных
+                   case 'SetNewCategoy' : { // запрос на добавление новой категории в базу данных
                db.SortedCategoryFollowed.get("SortedCategory").then(function(categorylist){ 
                     categorylist.push(e.data[2])
              db.SortedCategoryFollowed.put({
@@ -82,7 +81,10 @@ console.log(e);
                                     db.close();
              })
                })
+                        break;
             }
+        }
+         
     }
 
 function GetRoomList(e){
