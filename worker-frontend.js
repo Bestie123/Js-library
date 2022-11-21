@@ -33,7 +33,7 @@
             case 'SetFollowdRoomListInDB': { // запрос на запись подписки в базу данных
                 db.FollowedList.put({
                     id: e.data[2].id,
-                    data: e.data[2].FollowedCategory
+                    FollowedCategory: e.data[2].FollowedCategory
                 }).then(function(val) {
                     console.log(e)
                     if (val == e.data[2].id) {
