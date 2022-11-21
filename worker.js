@@ -32,6 +32,9 @@ sortedCategoryFollow.arr=e.data[3];
                 console.log(e.data[2]) // ответ true если подписка успешно удалена
                  break;
             }
+            case 'SetNewCategoy' : { // запрос на добавление новой категории в базу данных, переадрисовываем запрос от страницы к текущей рабочей странице
+            PageList[Object.keys(PageList)[0]].postMessage(['DB','SetNewCategoy',e.data[2]],[e.ports[0]]);
+            }
         }
     }
 
