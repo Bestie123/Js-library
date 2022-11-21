@@ -67,7 +67,7 @@ console.log(e);
                     categorylist.data.push(e.data[2])
              db.SortedCategoryFollowed.put({
                     id: 'SortedCategory',
-                    FollowedCategory: categorylist.data
+                    data: categorylist.data
                 }).then(function(val) {
                                       console.log(val);
                     console.log(e)
