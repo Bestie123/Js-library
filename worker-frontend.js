@@ -46,6 +46,7 @@ console.log(e);
 
                     } else {
                          e.ports[0].postMessage(false);
+                                                  e.ports[0].close();
                       //  e.currentTarget.postMessage(['DB','RetSetFollowdRoomListInDB', false]) // отправляем ответ, что подписка не сохранена
                     }
                                     db.close();
@@ -61,6 +62,27 @@ console.log(e);
                  break;
             }
         }
+          case 'SetNewCategoy' : { // запрос на добавление новой категории в базу данных
+               db.SortedCategoryFollowed.get("SortedCategory").then(function(categorylist){ 
+                    categorylist.push(e.data[2])
+             db.SortedCategoryFollowed.put({
+                    id: 'SortedCategory',
+                    FollowedCategory: categorylist
+                }).then(function(val) {
+                    console.log(e)
+                  if (val == e.data[2]) {
+console.log(e);
+                         e.ports[0].postMessage(true); // отправляем ответ, что категория успешно сохранена
+                         e.ports[0].close();
+                    } else {
+                         e.ports[0].postMessage(false);// отправляем ответ, что категория не сохранена
+                                                  e.ports[0].close();
+
+                    }
+                                    db.close();
+             })
+               })
+            }
     }
 
 function GetRoomList(e){
