@@ -14,7 +14,7 @@
                                             console.log(e)
   var db = new Dexie('Bestie123');
 
-    db.version(1).stores({
+    db.version(2).stores({
         FollowedList: 'id',
         SortedCategoryFollowed: 'id'
     });
