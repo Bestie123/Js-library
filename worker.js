@@ -25,6 +25,11 @@ sortedCategoryFollow.arr=e.data[3];
                 console.log(e.data[2]) // ответ true если подписка успешно удалена
                  break;
             }
+                case 'SetFollowdRoomListInDB': { // запрос на запись подписки в базу данных, переадрисовываем запрос от страницы к текущей рабочей странице
+                    PageList[Object.keys(PageList)[0]].postMessage(['DB','SetFollowdRoomListInDB',e.data[2]]);
+                console.log(e.data[2]) // ответ true если подписка успешно удалена
+                 break;
+            }
         }
     }
 
@@ -57,14 +62,15 @@ sortedCategoryFollow.arr=e.data[3];
                         connections++;
 
                         port.addEventListener("message", function(e) {
+                            console.log(e);
                                 switch (e.data[0]) {
                                     case 'ClosePage': { //отслеживание события закрытия вкладок и удаление подключений
                                         delete PageList[e.currentTarget.number]
                                     }
-                                    case 'RoomList': {
+                                    case 'RoomList': { //принимать обратный ответ с комнатами онлайн
                                         GetOnlineRoomList(e);
                                     }
-                                    case 'DB': {
+                                    case 'DB': {  //запросы на работу с базой данных
                                         Roomif(e);
                                     }
 
