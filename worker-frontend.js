@@ -38,11 +38,13 @@
                     console.log(e)
                     if (val == e.data[2].id) {
 console.log(e);
-                         e.currentTarget.postMessage(['DB','RetSetFollowdRoomListInDB', true]) // отправляем ответ, что подписка успешно сохранена
+                         e.ports[0].postMessage(true);
+                      //   e.currentTarget.postMessage(['DB','RetSetFollowdRoomListInDB', true]) // отправляем ответ, что подписка успешно сохранена
                         //             PageList[Object.keys(PageList)[0]].postMessage(['SetFollowdRoomListInDB',{id:'safdsg',FollowedCategory:545323}]);
 
                     } else {
-                        e.currentTarget.postMessage(['DB','RetSetFollowdRoomListInDB', false]) // отправляем ответ, что подписка не сохранена
+                         e.ports[0].postMessage(false);
+                      //  e.currentTarget.postMessage(['DB','RetSetFollowdRoomListInDB', false]) // отправляем ответ, что подписка не сохранена
                     }
                                     db.close();
                 })
