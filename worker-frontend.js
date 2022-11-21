@@ -37,7 +37,8 @@
                 }).then(function(val) {
                     console.log(e)
                     if (val == e.data[2].id) {
-                        e.currentTarget.postMessage(['DB','RetSetFollowdRoomListInDB', true]) // отправляем ответ, что подписка успешно сохранена
+console.log(e);
+                         e.currentTarget.postMessage(['DB','RetSetFollowdRoomListInDB', true]) // отправляем ответ, что подписка успешно сохранена
                         //             PageList[Object.keys(PageList)[0]].postMessage(['SetFollowdRoomListInDB',{id:'safdsg',FollowedCategory:545323}]);
 
                     } else {
