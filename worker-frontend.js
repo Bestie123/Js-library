@@ -74,6 +74,7 @@ console.log(e);
                     console.log(e)
                   if (val == 'SortedCategory') {
 console.log(e);
+                                              worker.port.postMessage('DB','updateCategoryadd',categorylist) //отправляем воркеру сообщение о добавлении новой категории
                          e.ports[0].postMessage(true); // отправляем ответ, что категория успешно сохранена
                          e.ports[0].close();
                     } else {
