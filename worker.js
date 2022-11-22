@@ -33,9 +33,18 @@ sortedCategoryFollow.arr=e.data[3];
                  break;
             }
             case 'SetNewCategoy' : { // запрос на добавление новой категории в базу данных, переадрисовываем запрос от страницы к текущей рабочей странице
-            PageList[Object.keys(PageList)[0]].postMessage(['DB','SetNewCategoy',e.data[2]],[e.ports[0]]);
-                break;
+                if(e.data[2] in sortedCategoryFollow.obj){ //проверяем существует ли уже данная категория
+                e.ports[0].postMessage(false) //отправляем сообщение о том что категория не создана
+                }else{
+                            PageList[Object.keys(PageList)[0]].postMessage(['DB','SetNewCategoy',e.data[2]],[e.ports[0]]);
+
+                }                break;
             }
+                case 'updateCategoryadd' { //запрос на добавление категории в онлайн копию базы данных
+        sortedCategoryFollow.push(e.data[2]);
+                sortedCategoryFollow.obj[e.data[2]]='';
+              //  e.ports[0].postMessage(true) // отправить сообщение об успешном доб категории
+        }
         }
     }
 
