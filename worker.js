@@ -35,6 +35,7 @@ sortedCategoryFollow.arr=e.data[3];
             case 'SetNewCategoy' : { // запрос на добавление новой категории в базу данных, переадрисовываем запрос от страницы к текущей рабочей странице
                 if(e.data[2] in sortedCategoryFollow.obj){ //проверяем существует ли уже данная категория
                 e.ports[0].postMessage(false) //отправляем сообщение о том что категория не создана
+                     e.ports[0].close();
                 }else{
                             PageList[Object.keys(PageList)[0]].postMessage(['DB','SetNewCategoy',e.data[2]],[e.ports[0]]);
 
