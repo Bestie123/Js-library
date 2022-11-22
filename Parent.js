@@ -11,25 +11,29 @@
 // ==/UserScript==
 //   protocol = unsafeWindow.location.protocol;
 (async () => {
-
+//----------------------Системные функции//----------------------
 function httpGet(theUrl) {
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.open("GET", theUrl, false); // false for synchronous request
         xmlHttp.send(null);
         return xmlHttp.responseText;
     }
+//----------------------Системные функции//----------------------
 
     function addInterface(worker1){
-   var  roomTabs = document.getElementById('roomTabs')
-var el = document.createElement('html');
+
+       function  CreateCategoryListContainer(){
+  var el = document.createElement('html');
   el.innerHTML = '<div class="whiteModal" style="width: 220px; border-width: 1px; position: absolute; border-style: solid; border-radius: 4px; font-size: 14px; padding: 8px 0px 8px 8px; display: none; z-index: 5; line-height: 22px; box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 16px; top: 38px; left: 1252.54px;"><div class="vjs-menu"><ul class="vjs-menu-content" role="menu"></ul></div>\n</div>'
-var  zz1 =el.children[1].firstChild
-var zz2 = el.children[1].firstChild.firstChild.firstChild
+return el.children[1].firstChild
+       }
+
+    var CategoryListContainer= CreateCategoryListContainer()
 
 
 
-//addElement = el.children[1].firstChild
- roomTabs.firstChild.append(zz1) // добавить список с категориями на страницу
+   var  roomTabs = document.getElementById('roomTabs')
+ roomTabs.firstChild.append(CategoryListContainer) // добавить список с категориями на страницу
 
 
 
@@ -107,14 +111,14 @@ if(e.data==true){
 
         })
 
-zz2.append(addElement2); //добавить контейнер с категориями в список
+CategoryListContainer.firstChild.firstChild.append(addElement2); //добавить контейнер с категориями в список
 
 
              // добавить поле ввода категории
 var el4 = document.createElement('html');
   el4.innerHTML ='<input ts="B" name="keywords" class="search_input" type="text" placeholder="Введите название новой категории" maxlength="150" autocomplete="off" id="keywords" data-listener-count-keydown="2" style="position: absolute; -webkit-tap-highlight-color: rgba(255, 255, 255, 0); border-radius: 3px; border-style: solid; border-width: 1px; display: block; padding: 0px 40px 2px 5px; margin-top: 0px; right: 0px; font: 12px UbuntuRegular, Arial, Helvetica, sans-serif; height: 21px; outline: none; width: 182px;">'
 var addElementText = el4.children[1].firstChild
-zz1.firstChild.append(addElementText);
+CategoryListContainer.firstChild.append(addElementText);
 
 
 //добавить кнопку добавления новой категорий в конец списка(вызывать после добавления всех категорий
@@ -167,7 +171,7 @@ if(e.data==true){
     worker1.port.postMessage(['DB','SetNewCategoy',addElementText.value], [channel.port2])
 //                worker1.port.postMessage("DB,");
              }
-zz2.append(addElement3); //добавить кнопку добавления категории на страницу
+CategoryListContainer.firstChild.firstChild.append(addElement3); //добавить кнопку добавления категории на страницу
 
 
 
@@ -178,10 +182,10 @@ zz2.append(addElement3); //добавить кнопку добавления к
     //посылаем запрос на получение списка категорий и на получение категории для данной комнаты
     // получаем ответ и отображаем список категорий с выделением принадлежности к определенной категории
 	if(checkdisplayzz3){
-	zz1.style.display='none'     // добавить удаление списка категорий
+	CategoryListContainer.style.display='none'     // добавить удаление списка категорий
 	checkdisplayzz3=false
 	}else{
-			zz1.style.display='block' // добавить оображение списка категорий
+			CategoryListContainer.style.display='block' // добавить оображение списка категорий
 	checkdisplayzz3=true
 
 	}
