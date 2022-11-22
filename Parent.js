@@ -36,70 +36,78 @@ var zz2 = el.children[1].firstChild.firstChild.firstChild
 
 
 
-
-
-
-
-
-
-
-
 //добавить кнопку подписки открывающую список с категориями
 var el5 = document.createElement('html');
   el5.innerHTML = '<div ts="X2" class="" style="color:red; height: 15px; width: auto; position: relative; overflow: hidden; -webkit-tap-highlight-color: transparent; display: inline; font-family: UbuntuMedium, Helvetica, Arial, sans-serif; font-size: 12px; padding: 3px 8px 2px; top: -4px; float: right; border-radius: 3px 0px 0px 3px; cursor: pointer; margin-right: 0px; border-width: 1px; border-style: solid;">ОТПИСАТЬСЯ\n</div>'
-var addElement =el5.children[1].firstChild
+var addElement1 =el5.children[1].firstChild
 
 var checkdisplayzz3=false;
-addElement.onclick=function(){ //выполняем действие при нажатии на кнопку
+addElement1.onclick=function(){ //выполняем действие при нажатии на кнопку
 var db = new Dexie('Bestie123');
-
+console.log(999)
     db.version(2).stores({
         FollowedList: 'id',
         SortedCategoryFollowed: 'id'
     });
     db.SortedCategoryFollowed.get("SortedCategory").then(function(e){ //запрос списка с категориями
          db.FollowedList.get(document.location.pathname).then(function(e2){ //запрос категории для текущей комнаты
-    var SortedCategoryarr = e.data; // записываем упорядоченный массив
+             console.log(1)
+    var SortedCategoryarr = e?.data==undefined ? []:e.data; // записываем упорядоченный массив
         var SortedCategoryObj ={};
-        e.data.forEach(function(item){
+        SortedCategoryarr.forEach(function(item){
 
             SortedCategoryObj[item]=''}) //создаем оъект для сравнения по ключу
 
 
-         addElement = document.createElement('div');
+        var addElement2 = document.createElement('div');
+
 var el2 = document.createElement('html');
   el2.innerHTML = '<li class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false">\n</li>'
                     var CategoryElement = el2.children[1].firstChild
                     var trueElement;
-        e.data.forEach(function(item){ //перебираем последовательно категории
+        SortedCategoryarr.forEach(function(item){ //перебираем последовательно категории
         var copyelement = CategoryElement.cloneNode();
-                        if(item==e2.FollowedCategory){ //если категория комнаты совпадает с текущей то выделять элемент
+                        if(item==e2?.FollowedCategory){ //если категория комнаты совпадает с текущей то выделять элемент
                            // trueElement.classList.remove('vjs-selected');
                             trueElement=copyelement; //записываем текущую выделенную категорию
                         copyelement.classList.add('vjs-selected')
 
+                        }else{
+                        //выводить пустую категорию
                         }
             copyelement.innerText=item  //устанавливаем айди категории или ее название
-copyelement.onclick=function(){//выполняем действие при выборе категории кнопкой мыши
+
+copyelement.onclick=function(){//выполняем действие при выборе категории для комнаты кнопкой мыши
 copyelement.classList.add('vjs-selected');
-    trueElement.classList.remove('vjs-selected');
+    trueElement?.classList?.remove('vjs-selected');
     trueElement= copyelement;
 
-     db.FollowedList.put({ //запись текущей выбранной категории для комнаты
+                var channel = new MessageChannel();  //создаем канал для передачи обратного ответа
+    channel.port1.onmessage=function(e){ // функция обратного вызова сообщающая об успешном сохранении категории комнаты в базе данных
+if(e.data==true){
+   console.log('Категория комнаты '+trueElement.innerText+ 'успешно сохранена')
+    }else{
+    console.log('Ошибка, категория комнаты '+trueElement.innerText+ 'не сохранена')
+    }
+        channel.port1.close();
+    }
+    worker1.port.postMessage(['DB','SetFollowdRoomListInDB',{id: document.location.pathname,FollowedCategory: trueElement.innerText}], [channel.port2])
+    /* db.FollowedList.put({ //запись текущей выбранной категории для комнаты
                     id: document.location.pathname,
                     FollowedCategory: trueElement.innerText
                 }).then(function(val) {console.log(val)})
+                */
     //++++!!!!!!!!!!!!!!!! добавить код для записи новой категории для комнаты(перезаписи старой)
     //++++ вероятно лучше всего посылать запрос воркеру т к воркер должен записывать изменения также в онлайн копию комнат и категорий . онлайн копия нужна для обработки списка онлайн комнт который приходит раз в 30 секундд
 // +++++или записывать данные локально на странице в базе данных, посылать воркеру копию на запись в онлайн копию хранилища
 //добвить запрос на изменение категории в  онлайн копии базы данных
 
 }
-            addElement.append(copyelement);
+            addElement2.append(copyelement);
 
         })
 
-zz2.append(addElement); //добавить категорию в список
+zz2.append(addElement2); //добавить контейнер с категориями в список
 
 
              // добавить поле ввода категории
@@ -112,11 +120,54 @@ zz1.firstChild.append(addElementText);
 //добавить кнопку добавления новой категорий в конец списка(вызывать после добавления всех категорий
 var el3 = document.createElement('html');
   el3.innerHTML = '<li ts="X2" class="" style="color:red;/* height: 15px; */width: auto;position: relative;/* overflow: hidden; *//* -webkit-tap-highlight-color: transparent; */display: inline;/* font-family: UbuntuMedium, Helvetica, Arial, sans-serif; *//* font-size: 12px; *//* padding: 3px 8px 2px; *//* top: -4px; */float: right;border-radius: 3px 0px 0px 3px;cursor: pointer;margin-right: 0px;border-width: 1px;border-style: solid;">добавить категорию\n</li>'
-addElement =el3.children[1].firstChild
-             addElement.onclick=function(){
+addElement3 =el3.children[1].firstChild
+             addElement3.onclick=function(){
              addElementText.value //!!!!!!!!! добавить код сохранения новой категории, переделать код чтоб не создавались постоянно копии элементов
+
+  var channel = new MessageChannel();  //создаем канал для передачи обратного ответа
+    channel.port1.onmessage=function(e){ // функция обратного вызова сообщающая об успешном сохранении категории комнаты в базе данных
+if(e.data==true){
+   console.log('Новая категория  '+addElementText.value+ ' успешно создана')
+    var el2 = document.createElement('html');
+  el2.innerHTML = '<li class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false">\n</li>'
+                    var CategoryElement = el2.children[1].firstChild
+                    CategoryElement.innerText=addElementText.value
+    CategoryElement.onclick=function(){//выполняем действие при выборе категории для комнаты кнопкой мыши
+CategoryElement.classList.add('vjs-selected');
+    trueElement.classList.remove('vjs-selected');
+    trueElement= CategoryElement;
+
+                var channel = new MessageChannel();  //создаем канал для передачи обратного ответа
+    channel.port1.onmessage=function(e){ // функция обратного вызова сообщающая об успешном сохранении категории комнаты в базе данных
+if(e.data==true){
+   console.log('Категория комнаты '+trueElement.innerText+ ' успешно сохранена')
+    }else{
+    console.log('Ошибка, категория комнаты '+trueElement.innerText+ ' не сохранена')
+    }
+        channel.port1.close();
+    }
+    worker1.port.postMessage(['DB','SetFollowdRoomListInDB',{id: document.location.pathname,FollowedCategory: trueElement.innerText}], [channel.port2])
+    /* db.FollowedList.put({ //запись текущей выбранной категории для комнаты
+                    id: document.location.pathname,
+                    FollowedCategory: trueElement.innerText
+                }).then(function(val) {console.log(val)})
+                */
+    //++++!!!!!!!!!!!!!!!! добавить код для записи новой категории для комнаты(перезаписи старой)
+    //++++ вероятно лучше всего посылать запрос воркеру т к воркер должен записывать изменения также в онлайн копию комнат и категорий . онлайн копия нужна для обработки списка онлайн комнт который приходит раз в 30 секундд
+// +++++или записывать данные локально на странице в базе данных, посылать воркеру копию на запись в онлайн копию хранилища
+//добвить запрос на изменение категории в  онлайн копии базы данных
+
+}
+    addElement2.append(CategoryElement)
+    }else{
+    console.log('Ошибка, категория '+addElementText.value+ ' не создана')
+    }
+        channel.port1.close();
+    }
+    worker1.port.postMessage(['DB','SetNewCategoy',addElementText.value], [channel.port2])
+//                worker1.port.postMessage("DB,");
              }
-zz2.append(addElement); //добавить кнопку в список
+zz2.append(addElement3); //добавить кнопку добавления категории на страницу
 
 
 
@@ -138,7 +189,7 @@ zz2.append(addElement); //добавить кнопку в список
 
 
 
-roomTabs.firstChild.firstChild.append(addElement) //добавляем кнопку подписки или отписки
+roomTabs.firstChild.firstChild.append(addElement1) //добавляем кнопку подписки или отписки
     }
 
     var a1 = httpGet('https://raw.githubusercontent.com/Bestie123/Js-library/main/worker-frontend.js'); // возвращает ссылку на воркер в промисе, загружет библиотеки Dexie
