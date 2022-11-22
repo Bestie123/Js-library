@@ -72,7 +72,7 @@ console.log(e);
                 }).then(function(val) {
                                       console.log(val);
                     console.log(e)
-                  if (val == e.data[2]) {
+                  if (val == 'SortedCategory') {
 console.log(e);
                          e.ports[0].postMessage(true); // отправляем ответ, что категория успешно сохранена
                          e.ports[0].close();
