@@ -101,7 +101,7 @@ function GetRoomList(e){
             var a2 = el.getElementsByClassName('room_list_room') // получаем список комнат
             var RoomList = [];
             for (let item of a2) {
-                RoomList.push([item.children[0].getAttribute('data-room'), item.outerHTML]) // отправляем все комнаты онайн (имена и их html код в формате строк)
+                RoomList.push([item.children[0].getAttribute('href'), item.outerHTML]) // отправляем все комнаты онайн (имена и их html код в формате строк)
             }
             e.currentTarget.postMessage(['RoomList', RoomList])
 }
