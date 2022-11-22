@@ -13,7 +13,7 @@
                  
                 e.data[2].forEach(function(item){ObjectFollowedList[item.id]=item.FollowedCategory})
 sortedCategoryFollow.arr=e.data[3];
-                e.data[3].forEach(function(item){ sortedCategoryFollow.obj[item.data]=''})
+                e.data[3][0].data.forEach(function(item){ sortedCategoryFollow.obj[item]=''})
                 
                  break;
             }
