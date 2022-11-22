@@ -22,7 +22,7 @@
             case 'GetAllFollowedRoomListInDB': { // запрос на получение всех комнат с подписками из базы данных
                 db.FollowedList.toArray().then(function(rooms) {
                     console.log(rooms)
-                    db.FollowedList.toArray().then(function(categories){
+                    db.SortedCategoryFollowed.toArray().then(function(categories){
                     e.currentTarget.postMessage(['DB','RetGetAllFollowedRoomListInDB', rooms,categories]) // отправляем массив всех комнат и массив категорий воркеру
                     //             PageList[Object.keys(PageList)[0]].postMessage(['GetAllFollowedRoomListInDB']);
                                     db.close();
