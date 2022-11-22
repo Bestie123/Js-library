@@ -33,6 +33,8 @@ sortedCategoryFollow.arr=e.data[3];
                  break;
             }
             case 'SetNewCategoy' : { // запрос на добавление новой категории в базу данных, переадрисовываем запрос от страницы к текущей рабочей странице
+console.log(sortedCategoryFollow)
+console.log(e)
                 if(e.data[2] in sortedCategoryFollow.obj){ //проверяем существует ли уже данная категория
                 e.ports[0].postMessage(false) //отправляем сообщение о том что категория не создана
                      e.ports[0].close();
