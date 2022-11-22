@@ -41,10 +41,11 @@ sortedCategoryFollow.arr=e.data[3];
 
                 }                break;
             }
-                case 'updateCategoryadd' { //запрос на добавление категории в онлайн копию базы данных
+            case 'updateCategoryadd' : { //запрос на добавление категории в онлайн копию базы данных
         sortedCategoryFollow.push(e.data[2]);
                 sortedCategoryFollow.obj[e.data[2]]='';
               //  e.ports[0].postMessage(true) // отправить сообщение об успешном доб категории
+                break;
         }
         }
     }
