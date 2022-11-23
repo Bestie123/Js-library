@@ -1,5 +1,5 @@
 (async () => {
-
+const OnlineRoomsChannel = new BroadcastChannel('OnlineRoomsChannel');
     ObjectFollowedList = {} // записываем все объекты в объект в оперативную память для воможно более быстрого доступа при переборе комнат
     self.PageList = {};
     var connections = 0;
