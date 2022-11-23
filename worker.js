@@ -68,7 +68,10 @@ console.log(e)
                     //сортировка комнат в блоки с категориями
 
                 }
-        })}
+        })
+        OnlineRoomsChannel.postMessage(FollowedCategoryList);
+
+    }
     
                 // создание списка подключений
                 // удаление подключения при закрытии страницы
