@@ -72,6 +72,11 @@ console.log(e)
         OnlineRoomsChannel.postMessage(FollowedCategoryList);
 
     }
+    function GetSortedOnlineRoomList(e){
+        e.ports[0].postMessage([true,faFollowedCategoryListlse]) //отправляем отсортированный список с категориями и комнатами
+        e.ports[0].close();
+
+    }
     
                 // создание списка подключений
                 // удаление подключения при закрытии страницы
@@ -94,6 +99,9 @@ console.log(e)
                                     }
                                     case 'DB': {  //запросы на работу с базой данных
                                         Roomif(e);
+                                    }
+                                    case 'GetRoomList': { //запрос на отсортированный список с категориями
+                                        GetSortedOnlineRoomList(e);
                                     }
 
                                 }
