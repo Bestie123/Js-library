@@ -73,8 +73,8 @@ console.log(e)
 
     }
     function GetSortedOnlineRoomList(e){
-        console.log(e)
-        e.ports[0].postMessage([true,FollowedCategoryList]) //отправляем отсортированный список с категориями и комнатами
+        console.log(e);
+        e.ports[0].postMessage([true,FollowedCategoryList]); //отправляем отсортированный список с категориями и комнатами
         e.ports[0].close();
 
     }
