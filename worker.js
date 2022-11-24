@@ -94,15 +94,19 @@ console.log(e)
                                 switch (e.data[0]) {
                                     case 'ClosePage': { //отслеживание события закрытия вкладок и удаление подключений
                                         delete PageList[e.currentTarget.number]
+                                        break;
                                     }
                                     case 'RoomList': { //принимать обратный ответ с комнатами онлайн
                                         GetOnlineRoomList(e);
+                                        break;
                                     }
                                     case 'DB': {  //запросы на работу с базой данных
                                         Roomif(e);
+                                        break;
                                     }
                                     case 'GetRoomList2': { //запрос на отсортированный список с категориями
                                         GetSortedOnlineRoomList2(e);
+                                        break;
                                     }
 
                                 }
