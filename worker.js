@@ -54,7 +54,7 @@ console.log(e)
 
     function GetOnlineRoomList(e) { // Обработка полученного списка онлайн комнат
         // событие ответа с онлайн комнатами
-        console.log(e.data)
+        console.log(e.data);
         FollowedCategoryList = {};
         e.data[1].forEach(function(item) {
 
@@ -63,21 +63,21 @@ console.log(e)
                     if (!(ObjectFollowedList[item[0]] in FollowedCategoryList)) { // если категория еще не инициализирована то инициализировать ее
                         FollowedCategoryList[ObjectFollowedList[item[0]]] = [];
                     }
-                    FollowedCategoryList[ObjectFollowedList[item[0]]].push(item) //вносим в категорию комнату и ее html код
+                    FollowedCategoryList[ObjectFollowedList[item[0]]].push(item); //вносим в категорию комнату и ее html код
                     // + сортировка по категориям
                     //сортировка комнат в блоки с категориями
 
                 }
-        })
+        });
         OnlineRoomsChannel.postMessage(FollowedCategoryList);
 
-    }
+    };
     function GetSortedOnlineRoomList(e){
         console.log(e);
         e.ports[0].postMessage([true,FollowedCategoryList]); //отправляем отсортированный список с категориями и комнатами
         e.ports[0].close();
 
-    }
+    };
     
                 // создание списка подключений
                 // удаление подключения при закрытии страницы
