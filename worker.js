@@ -69,7 +69,7 @@ console.log(e)
 
                 }
         });
-        OnlineRoomsChannel.postMessage(FollowedCategoryList);
+        OnlineRoomsChannel.postMessage([true,FollowedCategoryList]);
 
     };
     function GetSortedOnlineRoomList2(e){
