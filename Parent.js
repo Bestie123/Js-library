@@ -240,16 +240,11 @@
         let NameCategoryTextbox = CreateNameCategoryTextbox();
         let ParentNameCategoryTextbox = document.getElementsByClassName('sub-nav genderTabs ')[0]; //возможно еще не создано, можно добавить проверку в setinterval
         ParentNameCategoryTextbox.append(NameCategoryTextbox);
-        var trueElement, GeneralCategory = null;
+        let trueElement, GeneralCategory = null;
         //  -----------------------------
-        const OnlineRoomsChannel = new BroadcastChannel('OnlineRoomsChannel');
-        OnlineRoomsChannel.onmessage = function(e) {
+        function DisplayingCategoriesWithRooms(e){ // обработка информации об онлайн комнатах и отображение одной или нескольких категорий на странице, функция зависит от внешних переменных переключателей
                     let ContainerRoomList = document.getElementById('roomlist_root').children[1]
-            if (e.data[0] == true) {
-                if (GeneralCategory) { // если выделена главная категория то показываем все категории с онлайн комнатами
-                    NameCategoryTextbox.firstChild.innerText = trueElement //+' ('+e.data[1][trueElement].length+')'; // устанавливаем имя активной категории
-                    ContainerRoomList.replaceChildren() //удалить все онлайн комнаты
-                    for (let [key, value] of Object.entries(e.data[1])) {
+					let LocalFuncAddCategoryAndRooms=function(key,value){ //функция добавления категорий с онлайн комнатами на страницу // задействуется минимум из 2 мест
                         //---
                         let ParentCategoryContainer = CreateParentCategoryContainer(); //создаем контейнер куда помещаются название категории и категории с комнатам  для отображения на странице
                         //---
@@ -259,7 +254,6 @@
                         NameThisCategory.querySelector('a').text = key;
                         //---
                         value.forEach(function(item) { //добавить комнаты в контейнер для комнат //отобразить комнаты для всех категорий где есть онлайн комнаты
-
                             let Room = CreateHtmlFromText(item[1]); //генерация комнаты
                             ContainerForRooms.append(Room);
                         })
@@ -268,28 +262,33 @@
                         //---
                         ContainerRoomList.append(ParentCategoryContainer);
                     }
-
-
-
+ //--------------
+            if (e.data[0] == true) {
+                if (GeneralCategory) { // если выделена главная категория то показываем все категории с онлайн комнатами
+                    NameCategoryTextbox.firstChild.innerText = trueElement //+' ('+e.data[1][trueElement].length+')'; // устанавливаем имя активной категории
+                    ContainerRoomList.replaceChildren() //удалить все онлайн комнаты
+                    for (let [key, value] of Object.entries(e.data[1])) {
+LocalFuncAddCategoryAndRooms(key,value);
+                    }
                 } else if (trueElement in e.data[1]) { // если  текущая активная категория есть в списке рассылок
                     NameCategoryTextbox.firstChild.innerText = trueElement + ' (' + e.data[1][trueElement].length + ')';
                     ContainerRoomList.replaceChildren() //удалить все онлайн комнаты
-                    e.data[1][trueElement].forEach(function(item) { //отобразить комнаты для выбранной категории
-                        var Room = CreateHtmlFromText(item[1])
-                        ContainerRoomList.append(Room)
-                    })
+
+					LocalFuncAddCategoryAndRooms(trueElement,e.data[1][trueElement]);
                     console.log('Категория отображения ' + trueElement.innerText + 'успешно сохранена')
 
                 } else {
                     NameCategoryTextbox.firstChild.innerText = trueElement + ' (0)';
                     console.log('Категория отображения ' + trueElement?.innerText + 'успешно сохранена, онлайн комнаты  не обнаружены')
-
                 }
             } else {
                 console.log('Ошибка, категория отображения ' + trueElement?.innerText + 'не сохранена')
             }
             console.log('Received', e.data);
         };
+
+        const OnlineRoomsChannel = new BroadcastChannel('OnlineRoomsChannel'); // -- слушатель на обновления онлайн комнат
+        OnlineRoomsChannel.onmessage = DisplayingCategoriesWithRooms;
         //  -----------------------------
 
         var ButtonCategoryList_Open_Close = CreateButtonCategoryList_Open_Close();
@@ -340,49 +339,7 @@
                                 CategoryListContainer?.remove()
                                 let channel = new MessageChannel(); //создаем канал для передачи обратного ответа
                                 channel.port1.onmessage = function(e) { // функция обратного вызова сообщающая об успешном сохранении категории комнаты в базе данных
-                                    if (e.data[0] == true) {
-                                        if (GeneralCategory) { // если выделена главная категория то показываем все категории с онлайн комнатами
-                                            NameCategoryTextbox.firstChild.innerText = trueElement //+' ('+e.data[1][trueElement].length+')'; // устанавливаем имя активной категории
-                                            ContainerRoomList.replaceChildren() //удалить все онлайн комнаты
-                                            for (let [key, value] of Object.entries(e.data[1])) {
-                                                //---
-                                                let ParentCategoryContainer = CreateParentCategoryContainer(); //создаем контейнер куда помещаются название категории и категории с комнатам  для отображения на странице
-                                                //---
-                                                let ContainerForRooms = CreateContainerForRooms(); // контейнер для комнат
-                                                //---
-                                                let NameThisCategory = CreateNameThisCategory(); //элемент с названием категории
-                                                NameThisCategory.querySelector('a').text = key;
-                                                //---
-                                                value.forEach(function(item) { //добавить комнаты в контейнер для комнат //отобразить комнаты для всех категорий где есть онлайн комнаты
-
-                                                    let Room = CreateHtmlFromText(item[1]); //генерация комнаты
-                                                    ContainerForRooms.append(Room);
-                                                })
-                                                //---
-                                                ParentCategoryContainer.append(NameThisCategory, ContainerForRooms);
-                                                //---
-                                                ContainerRoomList.append(ParentCategoryContainer);
-                                            }
-
-
-
-                                        } else if (trueElement in e.data[1]) { // если  текущая активная категория есть в списке рассылок
-                                            NameCategoryTextbox.firstChild.innerText = trueElement + ' (' + e.data[1][trueElement].length + ')';
-                                            ContainerRoomList.replaceChildren() //удалить все онлайн комнаты
-                                            e.data[1][trueElement].forEach(function(item) { //отобразить комнаты для выбранной категории
-                                                var Room = CreateHtmlFromText(item[1])
-                                                ContainerRoomList.append(Room)
-                                            })
-                                            console.log('Категория отображения ' + trueElement.innerText + 'успешно сохранена')
-
-                                        } else {
-                                            NameCategoryTextbox.firstChild.innerText = trueElement + ' (0)';
-                                            console.log('Категория отображения ' + trueElement.innerText + 'успешно сохранена, онлайн комнаты  не обнаружены')
-
-                                        }
-                                    } else {
-                                        console.log('Ошибка, категория отображения ' + trueElement.innerText + 'не сохранена')
-                                    }
+                                        DisplayingCategoriesWithRooms(e)
                                     channel.port1.close();
                                 }
                                 console.log(channel.port2);
@@ -417,49 +374,7 @@
                                 CategoryListContainer?.remove()
                                 let channel = new MessageChannel(); //создаем канал для передачи обратного ответа
                                 channel.port1.onmessage = function(e) { // функция обратного вызова сообщающая об успешном сохранении категории комнаты в базе данных
-                                    if (e.data[0] == true) {
-                                        if (GeneralCategory) { // если выделена главная категория то показываем все категории с онлайн комнатами
-                                            NameCategoryTextbox.firstChild.innerText = trueElement //+' ('+e.data[1][trueElement].length+')'; // устанавливаем имя активной категории
-                                            ContainerRoomList.replaceChildren() //удалить все онлайн комнаты
-                                            for (let [key, value] of Object.entries(e.data[1])) {
-                                                //---
-                                                let ParentCategoryContainer = CreateParentCategoryContainer(); //создаем контейнер куда помещаются название категории и категории с комнатам  для отображения на странице
-                                                //---
-                                                let ContainerForRooms = CreateContainerForRooms(); // контейнер для комнат
-                                                //---
-                                                let NameThisCategory = CreateNameThisCategory(); //элемент с названием категории
-                                                NameThisCategory.querySelector('a').text = key;
-                                                //---
-                                                value.forEach(function(item) { //добавить комнаты в контейнер для комнат //отобразить комнаты для всех категорий где есть онлайн комнаты
-
-                                                    let Room = CreateHtmlFromText(item[1]); //генерация комнаты
-                                                    ContainerForRooms.append(Room);
-                                                })
-                                                //---
-                                                ParentCategoryContainer.append(NameThisCategory, ContainerForRooms);
-                                                //---
-                                                ContainerRoomList.append(ParentCategoryContainer);
-                                            }
-
-
-
-                                        } else if (trueElement in e.data[1]) { // если  текущая активная категория есть в списке рассылок
-                                            NameCategoryTextbox.firstChild.innerText = trueElement + ' (' + e.data[1][trueElement].length + ')';
-                                            ContainerRoomList.replaceChildren() //удалить все онлайн комнаты
-                                            e.data[1][trueElement].forEach(function(item) { //отобразить комнаты для выбранной категории
-                                                var Room = CreateHtmlFromText(item[1])
-                                                ContainerRoomList.append(Room)
-                                            })
-                                            console.log('Категория отображения ' + trueElement.innerText + 'успешно сохранена')
-
-                                        } else {
-                                            NameCategoryTextbox.firstChild.innerText = trueElement + ' (0)';
-                                            console.log('Категория отображения ' + trueElement.innerText + 'успешно сохранена, онлайн комнаты  не обнаружены')
-
-                                        }
-                                    } else {
-                                        console.log('Ошибка, категория отображения ' + trueElement.innerText + 'не сохранена')
-                                    }
+                                        DisplayingCategoriesWithRooms(e)
                                     channel.port1.close();
                                 }
                                 console.log(channel.port2);
