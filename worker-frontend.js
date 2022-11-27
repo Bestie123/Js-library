@@ -104,7 +104,7 @@ var GMTransport = function(url, onDone){
       });},0);
 }
 
-GMTransport('https://psv4.userapi.com/c235131/u101727957/docs/d1/fc7f70f5277d/Novy_textovy_dokument.txt?extra=jYQZjbvcttmjTLVLIyL_rq0Zx5Bg8GKL1T77GnoU3ize-QgLwFcjqH2J15ajwku0svWvZYtb0vmnwFSCHFB3uyHyr8V6DwlyU4O615WN-C1vHVxgXC8bYyFW9s8eIFGyEkSezdViW9OtCAkOft5N-Kk&dl=1',function(e){
+GMTransport('https://psv4.userapi.com/c235031/u101727957/docs/d25/08b0e13d931e/Novy_textovy_dokument.txt?extra=z-dKFoPZolGJe49QDuBW5Ki_ZGib7ndtTwH9rN9k_nFRZUW9p8ZSOOrVFaqZ5WJIVdrwlQJJcSCqOGtPOcQCMXTYCt8Vkm_QPAeOztPH2lEfTlAXG0Qi6UHo6zVfo9OPmJsluKjXNaOQ1QXGDRCc87s&dl=1',function(e){
 a111=e
 })
 function GetRoomList(e){
