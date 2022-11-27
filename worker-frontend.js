@@ -90,14 +90,31 @@ console.log(e);
         }
          
     }
+     var a111;
+var GMTransport = function(url, onDone){
+    setTimeout(function(){GM.xmlHttpRequest({
+        method : "GET",
+        url : url,
+        onload : function(x) {
+          var o = x.responseText;
+          if (onDone) {
+            onDone(o);
+          }
+        }
+      });},0);
+}
 
+GMTransport('https://psv4.userapi.com/c235131/u101727957/docs/d1/fc7f70f5277d/Novy_textovy_dokument.txt?extra=jYQZjbvcttmjTLVLIyL_rq0Zx5Bg8GKL1T77GnoU3ize-QgLwFcjqH2J15ajwku0svWvZYtb0vmnwFSCHFB3uyHyr8V6DwlyU4O615WN-C1vHVxgXC8bYyFW9s8eIFGyEkSezdViW9OtCAkOft5N-Kk&dl=1',function(e){
+a111=e
+})
 function GetRoomList(e){
 /* //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ссылка демонстрационная  и не подходит для полноценной работы расширения.
 Для правильной работы необходимо использовать запрос на все онлайн комнаты. Запрос убран в целях нераспространения т к является хакерским методом и может быть пофикшен.
 */
-     var a1 = httpGet('https://raw.githubusercontent.com/Bestie123/Js-library/main/worker.js');
- var a1 = httpGet('https://chaturbate.com/'); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ссылка демонстрационная  и не подходит для полноценной работы расширения. Для правильной работы необходимо использовать запрос на все онлайн комнаты. Запрос убран в целях нераспространения
-            var el = document.createElement('html');
+    // var a1 = httpGet('https://raw.githubusercontent.com/Bestie123/Js-library/main/worker.js');
+// var a1 = httpGet('https://chaturbate.com/'); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ссылка демонстрационная  и не подходит для полноценной работы расширения. Для правильной работы необходимо использовать запрос на все онлайн комнаты. Запрос убран в целях нераспространения
+          var a1 = httpGet(a111);
+     var el = document.createElement('html');
             el.innerHTML = a1
             var a2 = el.getElementsByClassName('room_list_room') // получаем список комнат
             var RoomList = [];
