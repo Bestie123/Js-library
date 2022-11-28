@@ -116,6 +116,7 @@ console.log(e)
 PageList[Object.keys(PageList)[0]].postMessage(['DB','GetAllFollowedRoomListInDB']); //запрос на получение всех подписок из базы данных, а также упорядоченного списка активных категорий
     
     setInterval(function() {
+        console.log(123)
         PageList[Object.keys(PageList)[0]].postMessage(['GetRoomList']);
         //port.postMessage(['GetRoomList']);
     }, 30000)
