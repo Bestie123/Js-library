@@ -5,11 +5,12 @@
 // @description  try to take over the world!
 // @author       You
 // @match        https://chaturbate.com/*
-// @unwrap
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=chaturbate.com
 // @grant unsafeWindow
+// @grant GM.xmlHttpRequest
 // ==/UserScript==
 //   protocol = unsafeWindow.location.protocol;
+// @unwrap ЗАПРЕЩАЕТ GM insafewindow
 (async () => {
     //----------------------Системные функции//----------------------
     function httpGet(theUrl) {
@@ -225,7 +226,7 @@
 
         function CreateNameThisCategory() { // создаем поле для отображения имени категории для отображения над онлайн комнатами (индивидуально для каждой категории)
             var el2 = document.createElement('html');
-            el2.innerHTML = '<div>\n<div class="followed_online_offline" data-status="">\n\n<div class="title ">\n<p><a data-floatingnav="" style="\n    color: red;\n"></a></p>\n</div>\n</div><h2></h2>\n</div>'
+            el2.innerHTML = '<div><h2></h2><div class="followed_online_offline" data-status="">\n\n<div class="title ">\n<p><a data-floatingnav="" style="color: red;font-weight: bolder;font-size: larger;"></a></p>\n</div>\n</div><h2></h2>\n</div>'
             var NameThisCategory = el2.children[1].firstChild
             return NameThisCategory // NameThisCategory.querySelector('a').text=1111
         }
@@ -242,38 +243,34 @@
         ParentNameCategoryTextbox.append(NameCategoryTextbox);
         let trueElement, GeneralCategory = null;
         //  -----------------------------
-        function DisplayingCategoriesWithRooms(e) { // обработка информации об онлайн комнатах и отображение одной или нескольких категорий на странице, функция зависит от внешних переменных переключателей
+        let DisplayingCategoriesWithRooms = function(e) { // обработка информации об онлайн комнатах и отображение одной или нескольких категорий на странице, функция зависит от внешних переменных переключателей
             let ContainerRoomList = document.getElementById('roomlist_root').children[1]
             let LocalFuncAddCategoryAndRooms = function(key, value) { //функция добавления категорий с онлайн комнатами на страницу // задействуется минимум из 2 мест
-                //---
                 let ParentCategoryContainer = CreateParentCategoryContainer(); //создаем контейнер куда помещаются название категории и категории с комнатам  для отображения на странице
-                //---
-                let ContainerForRooms = CreateContainerForRooms(); // контейнер для комнат
-                //---
-                let NameThisCategory = CreateNameThisCategory(); //элемент с названием категории
-                NameThisCategory.querySelector('a').text = key;
-                //---
+                let ContainerForRooms = CreateContainerForRooms(); //создаем контейнер для комнат
+                let NameThisCategory = CreateNameThisCategory(); //создаем элемент с названием категории
+                NameThisCategory.querySelector('a').text = key+' ('+value.length+')';
                 value.forEach(function(item) { //добавить комнаты в контейнер для комнат //отобразить комнаты для всех категорий где есть онлайн комнаты
                     let Room = CreateHtmlFromText(item[1]); //генерация комнаты
                     ContainerForRooms.append(Room);
                 })
-                //---
                 ParentCategoryContainer.append(NameThisCategory, ContainerForRooms);
-                //---
                 ContainerRoomList.append(ParentCategoryContainer);
             }
-            //--------------
+
             if (e.data[0] == true) {
                 if (GeneralCategory) { // если выделена главная категория то показываем все категории с онлайн комнатами
-                    NameCategoryTextbox.firstChild.innerText = trueElement //+' ('+e.data[1][trueElement].length+')'; // устанавливаем имя активной категории
+                         let counterOlnineRoomsForAllCategory =0;
+
                     ContainerRoomList.replaceChildren() //удалить все онлайн комнаты
                     for (let [key, value] of Object.entries(e.data[1])) {
                         LocalFuncAddCategoryAndRooms(key, value);
+                                                counterOlnineRoomsForAllCategory=counterOlnineRoomsForAllCategory+value.length;
                     }
+                                        NameCategoryTextbox.firstChild.innerText = trueElement +' ('+counterOlnineRoomsForAllCategory+')'; // устанавливаем имя активной категории
                 } else if (trueElement in e.data[1]) { // если  текущая активная категория есть в списке рассылок
                     NameCategoryTextbox.firstChild.innerText = trueElement + ' (' + e.data[1][trueElement].length + ')';
                     ContainerRoomList.replaceChildren() //удалить все онлайн комнаты
-
                     LocalFuncAddCategoryAndRooms(trueElement, e.data[1][trueElement]);
                     console.log('Категория отображения ' + trueElement + 'успешно сохранена')
 
@@ -284,11 +281,10 @@
             } else {
                 console.log('Ошибка, категория отображения ' + trueElement + 'не сохранена')
             }
-            console.log('Received', e.data);
         };
 
         const OnlineRoomsChannel = new BroadcastChannel('OnlineRoomsChannel'); // -- слушатель на обновления онлайн комнат
-        OnlineRoomsChannel.onmessage = DisplayingCategoriesWithRooms;
+        OnlineRoomsChannel.onmessage = (e)=>{ console.log(e);DisplayingCategoriesWithRooms(e)};
         //  -----------------------------
 
         var ButtonCategoryList_Open_Close = CreateButtonCategoryList_Open_Close();
@@ -299,7 +295,6 @@
             let SortedCategoryObj
             let checkdisplay
             let db = new Dexie('Bestie123');
-            console.log(999)
             db.version(2).stores({
                 FollowedList: 'id',
                 SortedCategoryFollowed: 'id'
@@ -311,17 +306,23 @@
                     CategoryListContainer = CreateCategoryListContainer() //создаем новый контейнер для списка категорий, добавляемый на страницу
                     CategoryList = CategoryListContainer.firstChild.firstChild //элемент куда добавляются категории
 
-                    db.SortedCategoryFollowed.get("SortedCategory").then(function(e) { //запрос списка с категориями
+                    db.SortedCategoryFollowed.get("SortedCategory").then(function(e) { //запрос полного списка с категориями
                         SortedCategoryarr = e?.data == undefined ? [] : e.data; // записываем упорядоченный массив
                         SortedCategoryObj = {};
                         SortedCategoryarr.forEach(function(item) {
                             SortedCategoryObj[item] = ''
-                        }); //создаем оъект для сравнения по ключу
+                        }); //создаем объект для сравнения по ключу
                         let channel = new MessageChannel(); //создаем канал для передачи обратного ответа
-                        channel.port1.onmessage = function(OnlineCategoryList) { // функция запроса категорий с онлайн комнатами
-                            let OnclickCategoryElement = function() { //действие при выборе категории
-                                let ContainerRoomList = document.getElementById('roomlist_root').children[1]
+                        channel.port1.onmessage = function(OnlineCategoryList) { // функция запроса категорий с онлайн комнатами //получаем отсортированный список с категориями и комнатами
 
+                            let counterOlnineRoomsForAllCategory =0;
+                                 for (let [key, value] of Object.entries(OnlineCategoryList.data[1])) {
+                        counterOlnineRoomsForAllCategory=counterOlnineRoomsForAllCategory+value.length;
+                    }
+                            ButtonCategoryList_Open_Close.querySelector('span').textContent="FOLLOWING ("+counterOlnineRoomsForAllCategory+')'
+
+
+                            let OnclickCategoryElement = function() { //действие при выборе категории
                                 // устанавливаем текущую активную категорию
                                 if (this?.GeneralCategory) {
                                     GeneralCategory = true;
@@ -333,29 +334,23 @@
                                 checkdisplay = true
                                 CategoryListContainer?.remove()
                                 let channel = new MessageChannel(); //создаем канал для передачи обратного ответа
-                                channel.port1.onmessage = function(e) { // функция запроса категорий с онлайн комнатами
+                                channel.port1.onmessage = function(e) { // функция запроса категорий с онлайн комнатам
                                     DisplayingCategoriesWithRooms(e) // зависит от GeneralCategory и дает сигнал на отображение общей категории
                                     channel.port1.close();
                                 }
-                                console.log(channel.port2);
                                 worker1.port.postMessage(['GetRoomList2'], [channel.port2])
-
-
-                                //+подключаем заранее слушатель на широковещательный канал и принимаем сообщения для конкретной категории
-                                //запросить комнаты для данной категории и отобразить сейчас
-                                // отображаем комнаты на странице
                             };
                             (function() {
+
                                 let CategoryElement = CreateCategoryElement();
-                                CategoryElement.firstChild.firstChild.firstChild.firstChild.innerText = 'Общая категория'; //название категории
-                                CategoryElement.firstChild.firstChild.firstChild.firstChild.nameCategory = 'Общая категория';
+                                CategoryElement.firstChild.firstChild.firstChild.firstChild.innerText = 'Общая категория ('+counterOlnineRoomsForAllCategory+')'; //название категории + общее количество онлайн комнат для категорий подписки
+                                CategoryElement.firstChild.firstChild.firstChild.firstChild.nameCategory = 'Общая категория'
                                 CategoryElement.firstChild.firstChild.firstChild.firstChild.style['font-weight'] = 'bolder';
                                 CategoryElement.firstChild.firstChild.firstChild.firstChild.style.color = '#64f358';
                                 CategoryElement.GeneralCategory = true; //индикатор общей категории
 
                                 if (GeneralCategory) {
                                     CategoryElement.firstChild.firstChild.firstChild.style.background = '#0752f4' //выделить текущую активную категорию
-
                                 }
 
                                 CategoryElement.onclick = OnclickCategoryElement
@@ -371,15 +366,11 @@
                                 CategoryElement.firstChild.firstChild.firstChild.firstChild.nameCategory = item;
                                 CategoryElement.onclick = OnclickCategoryElement
                                 CategoryList.append(CategoryElement) //добавляем категорию в список категорий
-
                             })
                             channel.port1.close();
                         }
-                        console.log(channel.port2);
                         worker1.port.postMessage(['GetRoomList2'], [channel.port2])
                     })
-
-
                     document.body.append(CategoryListContainer) // добавляем контейнер на страницу
                 } else { //отключать список и скрывть его
                     checkdisplay = true
