@@ -3,6 +3,7 @@ const OnlineRoomsChannel = new BroadcastChannel('OnlineRoomsChannel');
     ObjectFollowedList = {} // записываем все объекты в объект в оперативную память для воможно более быстрого доступа при переборе комнат
     self.PageList = {};
     var connections = 0;
+    let countAllRooms=0;
     var FollowedList = {};
     var FollowedCategoryList = {}; //список категорий с отсортированными комнатами для онлайн запроса
     var sortedCategoryFollow={arr:[],obj:{}}; //упорядоченный список категорий и объект с  айди категорий для проверки совпадает ли категория онлайн комнаты с установленными категориями
@@ -72,8 +73,8 @@ console.log(e)
     function GetOnlineRoomList(e) { // Обработка полученного списка онлайн комнат
         // событие ответа с онлайн комнатами
         console.log(e.data);
-        let countAllRooms=0;
-        FollowedCategoryList = {};
+        let LoccountAllRooms=0;
+       let  LocFollowedCategoryList = {};
         e.data[1].forEach(function(item) {
 
                 if (item[0] in ObjectFollowedList) { // если комната есть в списке подписок. перебор онлайн комнат и проверка наличия в списке подписок
@@ -88,12 +89,16 @@ console.log(e)
 
                 }
         });
+        // минимизация риска отсылки несоответствующих данных
+        FollowedCategoryList = LocFollowedCategoryList; 
+        countAllRooms= LoccountAllRooms;
+
         OnlineRoomsChannel.postMessage([true,FollowedCategoryList,countAllRooms]);
 
     };
     function GetSortedOnlineRoomList2(e){
         console.log(e);
-        e.ports[0].postMessage([true,FollowedCategoryList]); //отправляем отсортированный список с категориями и комнатами
+        e.ports[0].postMessage([true,FollowedCategoryList,countAllRooms]); //отправляем отсортированный список с категориями и комнатами
         e.ports[0].close();
 
     };
