@@ -60,7 +60,7 @@ console.log(e)
                 break;
             }
             case 'GetCategoryThisRoom': {
-                e.ports[0].postMessage([true,sortedCategoryFollow]); //возвращаем категорию для текущей комнаты
+                e.ports[0].postMessage([true,ObjectFollowedList[e.data[2]]]); //возвращаем категорию для текущей комнаты
                 e.ports[0].close();
                 break;
             }
