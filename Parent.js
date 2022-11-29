@@ -73,6 +73,38 @@ console.log(unsafeWindow);
                 FollowedList: 'id',
                 SortedCategoryFollowed: 'id'
             });
+             let SelectinoCategoryClick = function(element) { //выполняем действие при выборе категории для комнаты кнопкой мыши
+                                element.classList.add('vjs-selected');
+                                trueElement?.classList?.remove('vjs-selected');
+                                trueElement = element;
+
+                                let channel = new MessageChannel(); //создаем канал для передачи обратного ответа
+                                channel.port1.onmessage = function(e) { // функция обратного вызова сообщающая об успешном сохранении категории комнаты в базе данных
+                                    if (e.data == true) {
+                                        console.log('Категория комнаты ' + trueElement.innerText + 'успешно сохранена')
+                                    } else {
+                                        console.log('Ошибка, категория комнаты ' + trueElement.innerText + 'не сохранена')
+                                    }
+                                    channel.port1.close();
+                                }
+                                worker1.port.postMessage(['DB', 'SetFollowdRoomListInDB', {
+                                    id: document.location.pathname,
+                                    FollowedCategory: trueElement.innerText
+                                }], [channel.port2])
+
+
+                                /* db.FollowedList.put({ //запись текущей выбранной категории для комнаты
+                                                id: document.location.pathname,
+                                                FollowedCategory: trueElement.innerText
+                                            }).then(function(val) {console.log(val)})
+                                            */
+                                //++++!!!!!!!!!!!!!!!! добавить код для записи новой категории для комнаты(перезаписи старой)
+                                //++++ вероятно лучше всего посылать запрос воркеру т к воркер должен записывать изменения также в онлайн копию комнат и категорий . онлайн копия нужна для обработки списка онлайн комнт который приходит раз в 30 секундд
+                                // +++++или записывать данные локально на странице в базе данных, посылать воркеру копию на запись в онлайн копию хранилища
+                                //добвить запрос на изменение категории в  онлайн копии базы данных
+
+                            }
+
             ButtonCategoryList_Open_Close.onclick = function() { //выполняем действие при нажатии на кнопку открытия/закрытия списка категорий
                 if (checkdisplay) {
                     checkdisplay = false
@@ -109,50 +141,23 @@ console.log(unsafeWindow);
                     CategoryListContainer.firstChild.firstChild.append(ButtonAddNewCategory); //добавить кнопку добавления категории на страницу
 
 
-                    db.SortedCategoryFollowed.get("SortedCategory").then(function(e) { //запрос списка с категориями
-                        db.FollowedList.get(document.location.pathname).then(function(e2) { //запрос категории для текущей комнаты
-                            console.log(1)
-                            SortedCategoryarr = e?.data == undefined ? [] : e.data; // записываем упорядоченный массив
-                            SortedCategoryObj = {};
-                            SortedCategoryarr.forEach(function(item) {
-                                SortedCategoryObj[item] = ''
-                            }) //создаем оъект для сравнения по ключу
+                      let channel = new MessageChannel(); //создаем канал для передачи обратного ответа
+                                channel.port1.onmessage = function(SortedCategoryFollowInOnlineDB) { // функция обратного вызова сообщающая об успешном сохранении категории комнаты в базе данных
+                                    if (SortedCategoryFollowInOnlineDB.data[0] == true) {
+                                        console.log('Список категорий успешно получен')
+                                        let channel = new MessageChannel(); //создаем канал для передачи обратного ответа
+                                channel.port1.onmessage = function(CategoryThisRoom) { // функция обратного вызова сообщающая об успешном сохранении категории комнаты в базе данных
+                                    if (CategoryThisRoom.data[0] == true) {
+                                        console.log('Категория комнаты успешно получена')
 
-                            var SelectinoCategoryClick = function(element) { //выполняем действие при выборе категории для комнаты кнопкой мыши
-                                element.classList.add('vjs-selected');
-                                trueElement?.classList?.remove('vjs-selected');
-                                trueElement = element;
-
-                                let channel = new MessageChannel(); //создаем канал для передачи обратного ответа
-                                channel.port1.onmessage = function(e) { // функция обратного вызова сообщающая об успешном сохранении категории комнаты в базе данных
-                                    if (e.data == true) {
-                                        console.log('Категория комнаты ' + trueElement.innerText + 'успешно сохранена')
-                                    } else {
-                                        console.log('Ошибка, категория комнаты ' + trueElement.innerText + 'не сохранена')
-                                    }
-                                    channel.port1.close();
-                                }
-                                worker1.port.postMessage(['DB', 'SetFollowdRoomListInDB', {
-                                    id: document.location.pathname,
-                                    FollowedCategory: trueElement.innerText
-                                }], [channel.port2])
+                                        { //запрос категории для текущей комнаты
+                           // console.log(e)
+                                     //                   console.log(e2)
 
 
-                                /* db.FollowedList.put({ //запись текущей выбранной категории для комнаты
-                                                id: document.location.pathname,
-                                                FollowedCategory: trueElement.innerText
-                                            }).then(function(val) {console.log(val)})
-                                            */
-                                //++++!!!!!!!!!!!!!!!! добавить код для записи новой категории для комнаты(перезаписи старой)
-                                //++++ вероятно лучше всего посылать запрос воркеру т к воркер должен записывать изменения также в онлайн копию комнат и категорий . онлайн копия нужна для обработки списка онлайн комнт который приходит раз в 30 секундд
-                                // +++++или записывать данные локально на странице в базе данных, посылать воркеру копию на запись в онлайн копию хранилища
-                                //добвить запрос на изменение категории в  онлайн копии базы данных
-
-                            }
-
-                            SortedCategoryarr.forEach(function(item) { //перебираем последовательно категории
+                            SortedCategoryFollowInOnlineDB.data[1].arr[0].data.forEach(function(item) { //перебираем последовательно категории
                                 let copyelement = CreateCategoryElement();
-                                if (item == e2?.FollowedCategory) { //если категория комнаты совпадает с текущей то выделять элемент
+                                if (item == CategoryThisRoom.data[1]) { //если категория комнаты совпадает с текущей то выделять элемент
                                     // trueElement.classList.remove('vjs-selected');
                                     trueElement = copyelement; //записываем текущую выделенную категорию
                                     copyelement.classList.add('vjs-selected')
@@ -168,11 +173,22 @@ console.log(unsafeWindow);
 
                             })
 
+                        }
 
 
+                                    } else {
+                                        console.log('Ошибка, категория комнаты не получена')
+                                    }
+                                    channel.port1.close();
+                                }
+                                worker1.port.postMessage(['OnlineDatabase', 'GetCategoryThisRoom',document.location.pathname], [channel.port2]) //запрос категории для текущей комнаты
+                                    } else {
+                                        console.log('Ошибка, список категорий не получен')
+                                    }
+                                    channel.port1.close();
+                                }
+                                worker1.port.postMessage(['OnlineDatabase', 'GetsortedCategoryFollowInOnlineDB'], [channel.port2]) //запрос списка с категориями
 
-                        })
-                    })
 
                     roomTabs.firstChild.append(CategoryListContainer) // добавить список с категориями на
                     CategoryListContainer.style.display = 'block'
@@ -294,7 +310,7 @@ function CreateParentAllCategoryContainer(){ //создаем контейнер
                 } else if (trueElement in e.data[1]) { // если  текущая активная категория есть в списке рассылок
                     NameCategoryTextbox.firstChild.innerText = trueElement + ' (' + e.data[1][trueElement].length + ')';
                    // ParentCategoryContainer.replaceChildren() //удалить все онлайн комнаты
-                                   DeleteandNewCreateParentAllCategoryContainer.remove();
+                                   DeleteandNewCreateParentAllCategoryContainer();
                     LocalFuncAddCategoryAndRooms(trueElement, e.data[1][trueElement]);
                     console.log('Категория отображения ' + trueElement + 'успешно сохранена')
 
@@ -330,12 +346,11 @@ function CreateParentAllCategoryContainer(){ //создаем контейнер
                     CategoryListContainer = CreateCategoryListContainer() //создаем новый контейнер для списка категорий, добавляемый на страницу
                     CategoryList = CategoryListContainer.firstChild.firstChild //элемент куда добавляются категории
 
-                    db.SortedCategoryFollowed.get("SortedCategory").then(function(e) { //запрос полного списка с категориями
-                        SortedCategoryarr = e?.data == undefined ? [] : e.data; // записываем упорядоченный массив
-                        SortedCategoryObj = {};
-                        SortedCategoryarr.forEach(function(item) {
-                            SortedCategoryObj[item] = ''
-                        }); //создаем объект для сравнения по ключу
+                    let channel = new MessageChannel(); //создаем канал для передачи обратного ответа
+                                channel.port1.onmessage = function(SortedCategoryFollowInOnlineDB) { // функция обратного вызова сообщающая об успешном сохранении категории комнаты в базе данных
+                                    if (SortedCategoryFollowInOnlineDB.data[0] == true) {
+                                        console.log('Список категорий успешно получен')
+
                         let channel = new MessageChannel(); //создаем канал для передачи обратного ответа
                         channel.port1.onmessage = function(OnlineCategoryList) { // функция запроса категорий с онлайн комнатами //получаем отсортированный список с категориями и комнатами
 
@@ -380,7 +395,7 @@ function CreateParentAllCategoryContainer(){ //создаем контейнер
                                 CategoryElement.onclick = OnclickCategoryElement
                                 CategoryList.append(CategoryElement) //добавляем категорию в список категорий
                             })()
-                            SortedCategoryarr.forEach(function(item) { //перебираем последовательно все категории базы данных
+                            SortedCategoryFollowInOnlineDB.data[1].arr[0].data.forEach(function(item) { //перебираем последовательно все категории базы данных
                                 let CategoryElement = CreateCategoryElement();
                                 if (trueElement == item) {
                                     CategoryElement.firstChild.firstChild.firstChild.style.background = '#0752f4' //выделить текущую активную категорию
@@ -394,7 +409,15 @@ function CreateParentAllCategoryContainer(){ //создаем контейнер
                             channel.port1.close();
                         }
                         worker1.port.postMessage(['GetRoomList2'], [channel.port2])
-                    })
+
+
+                                } else {
+                                        console.log('Ошибка, список категорий не получен')
+                                    }
+                                    channel.port1.close();
+                                }
+                                worker1.port.postMessage(['OnlineDatabase', 'GetsortedCategoryFollowInOnlineDB'], [channel.port2]) //запрос списка с категориями
+
                     document.body.append(CategoryListContainer) // добавляем контейнер на страницу
                 } else { //отключать список и скрывть его
                     checkdisplay = true
