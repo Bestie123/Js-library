@@ -83,7 +83,7 @@ console.log(e)
                         FollowedCategoryList[ObjectFollowedList[item[0]]] = [];
                     }
                     FollowedCategoryList[ObjectFollowedList[item[0]]].push(item); //вносим в категорию комнату и ее html код
-                    countAllRooms++; //Увеличиваем счетчик общего колиества онлайн комнат во всех категориях
+                    LoccountAllRooms++; //Увеличиваем счетчик общего колиества онлайн комнат во всех категориях
                     // + сортировка по категориям
                     //сортировка комнат в блоки с категориями
 
