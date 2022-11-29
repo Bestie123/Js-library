@@ -72,7 +72,8 @@ console.log(e)
     function GetOnlineRoomList(e) { // Обработка полученного списка онлайн комнат
         // событие ответа с онлайн комнатами
         console.log(e.data);
-        FollowedCategoryList = {countAllRooms:0};
+        let countAllRooms=0;
+        FollowedCategoryList = {};
         e.data[1].forEach(function(item) {
 
                 if (item[0] in ObjectFollowedList) { // если комната есть в списке подписок. перебор онлайн комнат и проверка наличия в списке подписок
@@ -81,13 +82,13 @@ console.log(e)
                         FollowedCategoryList[ObjectFollowedList[item[0]]] = [];
                     }
                     FollowedCategoryList[ObjectFollowedList[item[0]]].push(item); //вносим в категорию комнату и ее html код
-                    FollowedCategoryList.countAllRooms++; //Увеличиваем счетчик общего колиества онлайн комнат во всех категориях
+                    countAllRooms++; //Увеличиваем счетчик общего колиества онлайн комнат во всех категориях
                     // + сортировка по категориям
                     //сортировка комнат в блоки с категориями
 
                 }
         });
-        OnlineRoomsChannel.postMessage([true,FollowedCategoryList]);
+        OnlineRoomsChannel.postMessage([true,FollowedCategoryList,countAllRooms]);
 
     };
     function GetSortedOnlineRoomList2(e){
