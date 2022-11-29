@@ -52,6 +52,23 @@ console.log(e)
         }
     }
 
+    function OnlineDatabase(e){ //запросы к онлайн базе данных
+        switch (e.data[1]) {
+            case 'GetsortedCategoryFollowInOnlineDB': {
+                e.ports[0].postMessage([true,sortedCategoryFollow]); //упорядоченный список категорий и объект с  айди категорий для проверки совпадает ли категория онлайн комнаты с установленными категориями
+                e.ports[0].close();
+                break;
+            }
+            case 'GetCategoryThisRoom': {
+                e.ports[0].postMessage([true,sortedCategoryFollow]); //возвращаем категорию для текущей комнаты
+                e.ports[0].close();
+                break;
+            }
+
+        }
+        
+    }
+
     function GetOnlineRoomList(e) { // Обработка полученного списка онлайн комнат
         // событие ответа с онлайн комнатами
         console.log(e.data);
@@ -108,7 +125,10 @@ console.log(e)
                                         GetSortedOnlineRoomList2(e);
                                         break;
                                     }
-
+                                    case 'OnlineDatabase': { //запрос на отсортированный список с категориями
+                                        OnlineDatabase(e);
+                                        break;
+                                    }
                                 }
                         })
                   port.start();
