@@ -79,10 +79,10 @@ console.log(e)
 
                 if (item[0] in ObjectFollowedList) { // если комната есть в списке подписок. перебор онлайн комнат и проверка наличия в списке подписок
                     //if(FollowedCategoryList[FollowedList[item[0]]] === 'undefined'){ // если список комнат с категорией не создан то создать его-------------------------не срабатывае проверка
-                    if (!(ObjectFollowedList[item[0]] in FollowedCategoryList)) { // если категория еще не инициализирована то инициализировать ее
-                        FollowedCategoryList[ObjectFollowedList[item[0]]] = [];
+                    if (!(ObjectFollowedList[item[0]] in LocFollowedCategoryList)) { // если категория еще не инициализирована то инициализировать ее
+                        LocFollowedCategoryList[ObjectFollowedList[item[0]]] = [];
                     }
-                    FollowedCategoryList[ObjectFollowedList[item[0]]].push(item); //вносим в категорию комнату и ее html код
+                    LocFollowedCategoryList[ObjectFollowedList[item[0]]].push(item); //вносим в категорию комнату и ее html код
                     LoccountAllRooms++; //Увеличиваем счетчик общего колиества онлайн комнат во всех категориях
                     // + сортировка по категориям
                     //сортировка комнат в блоки с категориями
