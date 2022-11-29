@@ -10,7 +10,10 @@
 // @grant GM.xmlHttpRequest
 // ==/UserScript==
 //   protocol = unsafeWindow.location.protocol;
-// @unwrap ЗАПРЕЩАЕТ GM insafewindow
+// @unwrap ЗАПРЕЩАЕТ GM unsafewindow
+// // @match        https://*/*
+
+console.log(unsafeWindow);
 (async () => {
     //----------------------Системные функции//----------------------
     function httpGet(theUrl) {
@@ -133,6 +136,8 @@
                                     id: document.location.pathname,
                                     FollowedCategory: trueElement.innerText
                                 }], [channel.port2])
+
+
                                 /* db.FollowedList.put({ //запись текущей выбранной категории для комнаты
                                                 id: document.location.pathname,
                                                 FollowedCategory: trueElement.innerText
@@ -216,11 +221,14 @@
             var NameCategoryTextbox = el2.children[1].firstChild
             return NameCategoryTextbox
         }
+function CreateParentAllCategoryContainer(){ //создаем контейнер для всех категорий
+            return document.createElement('div');
 
+}
         function CreateParentCategoryContainer() { //создаем контейнер куда помещаются название категории и категории с комнатам  для отображения на странице
             var el2 = document.createElement('html');
-            el2.innerHTML = '<div class="endless_page_template">\n\n\n</div>'
-            var ParentCategoryContainer = el2.children[1].firstChild
+            el2.innerHTML = '<div class="content endless_page_template" style="padding: 11px 0 17px; margin-left: 15px; margin-right: 15px;">\n\n\n</div>'
+            let ParentCategoryContainer = el2.children[1].firstChild
             return ParentCategoryContainer
         }
 
@@ -239,14 +247,23 @@
         }
 
         let NameCategoryTextbox = CreateNameCategoryTextbox();
-        let ParentNameCategoryTextbox = document.getElementsByClassName('sub-nav genderTabs ')[0]; //возможно еще не создано, можно добавить проверку в setinterval
-        ParentNameCategoryTextbox.append(NameCategoryTextbox);
-        let trueElement, GeneralCategory = null;
+        let ParentNameCategoryTextbox = document.getElementById('main'); //возможно еще не создано, можно добавить проверку в setinterval
+        ParentNameCategoryTextbox.prepend(NameCategoryTextbox);
+        let trueElement, GeneralCategory,ParentCategoryContainer,ParentAllCategoryContainer = null;
         //  -----------------------------
         let DisplayingCategoriesWithRooms = function(e) { // обработка информации об онлайн комнатах и отображение одной или нескольких категорий на странице, функция зависит от внешних переменных переключателей
-            let ContainerRoomList = document.getElementById('roomlist_root').children[1]
+
+//ContainerRoomList?.remove();
+            let ContainerRoomList = document.getElementById('main')
+                             //   ContainerRoomList.replaceChildren() //удалить все онлайн комнаты
             let LocalFuncAddCategoryAndRooms = function(key, value) { //функция добавления категорий с онлайн комнатами на страницу // задействуется минимум из 2 мест
-                let ParentCategoryContainer = CreateParentCategoryContainer(); //создаем контейнер куда помещаются название категории и категории с комнатам  для отображения на странице
+                          let ContainerRoomList0 = document.getElementsByClassName('genderTabs')[0].nextSibling; // используется на страницах с комнатами
+                                           ContainerRoomList0?.remove(); //удалить 'элемент с трансляцией
+           document.getElementById('roomlist_root')?.parentElement?.remove() ;// используется на страницах где показываются миниатюры комнат, удаляет элемент с комнатами
+                document.getElementsByClassName('content discover-content')[0]?.remove(); // удаляет стндартные комнаты на вкладке "актуальное"
+               document.getElementById('trending_root')?.remove(); // удаляем элемент с выбором тегов на вкладке "tags"
+
+                 ParentCategoryContainer = CreateParentCategoryContainer(); //создаем контейнер куда помещаются название категории и категории с комнатам  для отображения на странице
                 let ContainerForRooms = CreateContainerForRooms(); //создаем контейнер для комнат
                 let NameThisCategory = CreateNameThisCategory(); //создаем элемент с названием категории
                 NameThisCategory.querySelector('a').text = key+' ('+value.length+')';
@@ -255,14 +272,20 @@
                     ContainerForRooms.append(Room);
                 })
                 ParentCategoryContainer.append(NameThisCategory, ContainerForRooms);
-                ContainerRoomList.append(ParentCategoryContainer);
+                ParentAllCategoryContainer.append(ParentCategoryContainer);
             }
+            let DeleteandNewCreateParentAllCategoryContainer =function(){
+                ParentAllCategoryContainer?.remove();
+               ParentAllCategoryContainer = CreateParentAllCategoryContainer();
+                ContainerRoomList.append(ParentAllCategoryContainer);
+
+            }
+
 
             if (e.data[0] == true) {
                 if (GeneralCategory) { // если выделена главная категория то показываем все категории с онлайн комнатами
                          let counterOlnineRoomsForAllCategory =0;
-
-                    ContainerRoomList.replaceChildren() //удалить все онлайн комнаты
+                DeleteandNewCreateParentAllCategoryContainer();
                     for (let [key, value] of Object.entries(e.data[1])) {
                         LocalFuncAddCategoryAndRooms(key, value);
                                                 counterOlnineRoomsForAllCategory=counterOlnineRoomsForAllCategory+value.length;
@@ -270,7 +293,8 @@
                                         NameCategoryTextbox.firstChild.innerText = trueElement +' ('+counterOlnineRoomsForAllCategory+')'; // устанавливаем имя активной категории
                 } else if (trueElement in e.data[1]) { // если  текущая активная категория есть в списке рассылок
                     NameCategoryTextbox.firstChild.innerText = trueElement + ' (' + e.data[1][trueElement].length + ')';
-                    ContainerRoomList.replaceChildren() //удалить все онлайн комнаты
+                   // ParentCategoryContainer.replaceChildren() //удалить все онлайн комнаты
+                                   DeleteandNewCreateParentAllCategoryContainer.remove();
                     LocalFuncAddCategoryAndRooms(trueElement, e.data[1][trueElement]);
                     console.log('Категория отображения ' + trueElement + 'успешно сохранена')
 
@@ -378,8 +402,13 @@
                 }
             }
         })()
-        var CategoryListButtonEmbeddingPlace = document.getElementById('nav')
+          let timerId = setInterval(() => {
+                      var CategoryListButtonEmbeddingPlace = document.getElementById('nav')
+            if (CategoryListButtonEmbeddingPlace != null) {
+                clearInterval(timerId)
         CategoryListButtonEmbeddingPlace.append(ButtonCategoryList_Open_Close) //добавляем кнопку открытия/закрытия списка категорий
+            }
+        }, 100);
 
     }
     //----------------------------------------------------------------------------------------------module2----------------------------------------------------------------------------------------------
