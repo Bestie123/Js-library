@@ -153,7 +153,7 @@ console.log(e)
                                 channel2.port1.onmessage = function(e3) { 
 
                                     console.log(777777777737);
-                                    GetOnlineRoomList(e);
+                                    GetOnlineRoomList(e3);
                                     letInitializationExtension=true;
                                     LocSwitchPushMessages(e);
                                     channel2.port1.close();
