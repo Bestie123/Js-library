@@ -156,6 +156,11 @@ console.log(e)
                                     GetOnlineRoomList(e3);
                                     letInitializationExtension=true;
                                     LocSwitchPushMessages(e);
+                                    setInterval(function() {
+                                        console.log(123)
+                                        PageList[Object.keys(PageList)[0]].postMessage(['GetRoomList']);
+                                        //port.postMessage(['GetRoomList']);
+                                    }, 30000)
                                     channel2.port1.close();
                                 }
                                 PageList[Object.keys(PageList)[0]].postMessage(['GetRoomList'],[channel2.port2]);
@@ -167,12 +172,6 @@ console.log(e)
                   port.start();
                     
 
-
-    setInterval(function() {
-        console.log(123)
-        PageList[Object.keys(PageList)[0]].postMessage(['GetRoomList']);
-        //port.postMessage(['GetRoomList']);
-    }, 30000)
                     
         }, false);
     })()
