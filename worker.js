@@ -1,4 +1,5 @@
 (async () => {
+    letInitializationExtension=false;
 const OnlineRoomsChannel = new BroadcastChannel('OnlineRoomsChannel');
     ObjectFollowedList = {} // записываем все объекты в объект в оперативную память для воможно более быстрого доступа при переборе комнат
     self.PageList = {};
@@ -15,7 +16,7 @@ const OnlineRoomsChannel = new BroadcastChannel('OnlineRoomsChannel');
                 e.data[2].forEach(function(item){ObjectFollowedList[item.id]=item.FollowedCategory})
 sortedCategoryFollow.arr=e.data[3];
                 e.data[3][0].data.forEach(function(item){ sortedCategoryFollow.obj[item]=''})
-                
+               // e.ports[0]?.postMessage(false) 
                  break;
             }
             case 'RetSetFollowdRoomListInDB': {
@@ -92,8 +93,9 @@ console.log(e)
         // минимизация риска отсылки несоответствующих данных
         FollowedCategoryList = LocFollowedCategoryList; 
         countAllRooms= LoccountAllRooms;
-
-        OnlineRoomsChannel.postMessage([true,FollowedCategoryList,countAllRooms]);
+      if(e.ports[0] == undefined){
+      OnlineRoomsChannel.postMessage([true,FollowedCategoryList,countAllRooms]);
+      }
 
     };
     function GetSortedOnlineRoomList2(e){
@@ -106,6 +108,32 @@ console.log(e)
                 // создание списка подключений
                 // удаление подключения при закрытии страницы
                 // запрос онлайн комнат и возвращение списка
+                (function(){
+                    let LocSwitchPushMessages = function(e){
+                        console.log(e);
+                        switch (e.data[0]) {
+                            case 'ClosePage': { //отслеживание события закрытия вкладок и удаление подключений
+                                delete PageList[e.currentTarget.number]
+                                break;
+                            }
+                            case 'RoomList': { //принимать обратный ответ с комнатами онлайн
+                                GetOnlineRoomList(e);
+                                break;
+                            }
+                            case 'DB': {  //запросы на работу с базой данных
+                                Roomif(e);
+                                break;
+                            }
+                            case 'GetRoomList2': { //запрос на отсортированный список с категориями
+                                GetSortedOnlineRoomList2(e);
+                                break;
+                            }
+                            case 'OnlineDatabase': { //запрос на отсортированный список с категориями
+                                OnlineDatabase(e);
+                                break;
+                            }
+                        }         
+                    }
                 self.addEventListener("connect", function(e) { //отслеживание подключения новых вкладок
                     console.log(e)
                         var port = e.ports[0];
@@ -114,34 +142,31 @@ console.log(e)
                         connections++;
 
                         port.addEventListener("message", function(e) {
+                            if (letInitializationExtension){
                             console.log(e);
-                                switch (e.data[0]) {
-                                    case 'ClosePage': { //отслеживание события закрытия вкладок и удаление подключений
-                                        delete PageList[e.currentTarget.number]
-                                        break;
-                                    }
-                                    case 'RoomList': { //принимать обратный ответ с комнатами онлайн
-                                        GetOnlineRoomList(e);
-                                        break;
-                                    }
-                                    case 'DB': {  //запросы на работу с базой данных
-                                        Roomif(e);
-                                        break;
-                                    }
-                                    case 'GetRoomList2': { //запрос на отсортированный список с категориями
-                                        GetSortedOnlineRoomList2(e);
-                                        break;
-                                    }
-                                    case 'OnlineDatabase': { //запрос на отсортированный список с категориями
-                                        OnlineDatabase(e);
-                                        break;
-                                    }
+                            LocSwitchPushMessages(e);
+                            }else{
+                                let channel = new MessageChannel(); 
+                                channel.port1.onmessage = function(e2) { 
+                                    Roomif(e2);
+                                    let channel2 = new MessageChannel(); 
+                                channel2.port1.onmessage = function(e3) { 
+
+                                    console.log(777777777737);
+                                    GetOnlineRoomList(e);
+                                    letInitializationExtension=true;
+                                    LocSwitchPushMessages(e);
+                                    channel2.port1.close();
                                 }
+                                PageList[Object.keys(PageList)[0]].postMessage(['GetRoomList'],[channel2.port2]);
+                                    channel.port1.close();
+                                }
+                                PageList[Object.keys(PageList)[0]].postMessage(['DB','GetAllFollowedRoomListInDB'], [channel.port2]); //запрос на получение всех подписок из базы данных, а также упорядоченного списка активных категорий
+                            }   
                         })
                   port.start();
                     
-PageList[Object.keys(PageList)[0]].postMessage(['DB','GetAllFollowedRoomListInDB']); //запрос на получение всех подписок из базы данных, а также упорядоченного списка активных категорий
-PageList[Object.keys(PageList)[0]].postMessage(['GetRoomList']);
+
 
     setInterval(function() {
         console.log(123)
@@ -150,5 +175,6 @@ PageList[Object.keys(PageList)[0]].postMessage(['GetRoomList']);
     }, 30000)
                     
         }, false);
+    })()
 
 })();

@@ -23,8 +23,14 @@
                 db.FollowedList.toArray().then(function(rooms) {
                     console.log(rooms)
                     db.SortedCategoryFollowed.toArray().then(function(categories){
-                    e.currentTarget.postMessage(['DB','RetGetAllFollowedRoomListInDB', rooms,categories]) // отправляем массив всех комнат и массив категорий воркеру
-                    //             PageList[Object.keys(PageList)[0]].postMessage(['GetAllFollowedRoomListInDB']);
+                        let  locSendport = (e.ports[0] == undefined) ?  e.currentTarget  : e.ports[0]
+                      //  locSendport.postMessage([true,FollowedCategoryList,countAllRooms]);
+                        locSendport.postMessage(['DB','RetGetAllFollowedRoomListInDB', rooms,categories]) // отправляем массив всех комнат и массив категорий воркеру
+                    if (e.ports[0] != undefined){
+                        e.ports[0].close();
+                    }
+                        //             PageList[Object.keys(PageList)[0]].postMessage(['GetAllFollowedRoomListInDB']);
+                  //  e.ports[0]?.postMessage(false) 
                                     db.close();
                     })
                 })
@@ -122,7 +128,11 @@ function GetRoomList(e){
             for (let item of a2) {
                 RoomList.push([item.children[0].getAttribute('href'), item.outerHTML]) // отправляем все комнаты онайн (имена и их html код в формате строк)
             }
-            e.currentTarget.postMessage(['RoomList', RoomList])
+           // let  locSendport = (e.ports[0] == undefined) ?  e.currentTarget  : e.ports[0]
+            //  locSendport.postMessage([true,FollowedCategoryList,countAllRooms]);
+            locSendport.postMessage(['RoomList', RoomList],[e.ports[0]])
+  
+
 }
 
 
