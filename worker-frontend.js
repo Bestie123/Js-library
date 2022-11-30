@@ -131,7 +131,8 @@ function GetRoomList(e){
             }
             let  locSendport = (e.ports[0] == undefined) ?  e.currentTarget  : e.ports[0]
             //  locSendport.postMessage([true,FollowedCategoryList,countAllRooms]);
-            locSendport.postMessage(['RoomList', RoomList],[e.ports[0]])
+           // locSendport.postMessage(['RoomList', RoomList],[e.ports[0]])
+           locSendport.postMessage(['RoomList', RoomList])
   
 
 }
