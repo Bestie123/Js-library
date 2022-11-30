@@ -129,7 +129,7 @@ function GetRoomList(e){
             for (let item of a2) {
                 RoomList.push([item.children[0].getAttribute('href'), item.outerHTML]) // отправляем все комнаты онайн (имена и их html код в формате строк)
             }
-           // let  locSendport = (e.ports[0] == undefined) ?  e.currentTarget  : e.ports[0]
+            let  locSendport = (e.ports[0] == undefined) ?  e.currentTarget  : e.ports[0]
             //  locSendport.postMessage([true,FollowedCategoryList,countAllRooms]);
             locSendport.postMessage(['RoomList', RoomList],[e.ports[0]])
   
