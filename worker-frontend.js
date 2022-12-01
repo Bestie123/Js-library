@@ -143,7 +143,8 @@ function GetRoomList(e){
   //!! var url = 'blob:https://github.dev/application/x-javascript;base64,' + btoa(unescape(encodeURIComponent(a1)));
 //    var worker = new SharedWorker(url);
     console.log(11111111111)
- blob = new Blob([unescape(encodeURIComponent(a1))], {type: 'github/application/javascript'});
+ blob = new Blob([unescape(encodeURIComponent(a1))], {type: 'application/javascript'});
+ console.log(blob)
  var worker = new SharedWorker(URL.createObjectURL(blob));
 
      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=worker; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
