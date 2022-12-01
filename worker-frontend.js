@@ -138,8 +138,8 @@ function GetRoomList(e){
 }
 
 
-    var url = 'data:https://github.dev/application/x-javascript;base64,' + btoa(unescape(encodeURIComponent(a1)));
-   //!!!!  var url = 'blob:https://github.dev/application/x-javascript;base64,' + btoa(unescape(encodeURIComponent(a1)));
+//    var url = 'data:https://github.dev/application/x-javascript;base64,' + btoa(unescape(encodeURIComponent(a1)));
+  var url = 'blob:https://chaturbate.com/application/x-javascript;base64,' + btoa(unescape(encodeURIComponent(a1)));
   //!! var url = 'blob:https://github.dev/application/x-javascript;base64,' + btoa(unescape(encodeURIComponent(a1)));
     var worker = new SharedWorker(url);
  //blob = new Blob([unescape(encodeURIComponent(a1))], {type: 'application/javascript'});
