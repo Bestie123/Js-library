@@ -142,7 +142,7 @@ function GetRoomList(e){
  //   var worker = new SharedWorker(url);
 
  blob = new Blob([btoa(unescape(encodeURIComponent(a1)))], {type: 'application/javascript'});
- var worker = new Worker(URL.createObjectURL(blob));
+ var worker = new SharedWorker(URL.createObjectURL(blob));
 
      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=worker; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     window.onbeforeunload = function() { // отправять сообщение о закрытии страницы воркеру чтоб удалить порт // вешать событие на закрытие страницы, при возникновении отослать сообщение на закрытие канала
