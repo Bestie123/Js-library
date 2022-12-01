@@ -144,7 +144,7 @@ function GetRoomList(e){
 //    var worker = new SharedWorker(url);
     console.log(11111111111)
  blob = new Blob([unescape(encodeURIComponent(a1))], {type: 'application/javascript'});
- console.log(blob)
+ console.log(URL.createObjectURL(blob))
  var worker = new SharedWorker(URL.createObjectURL(blob));
 
      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=worker; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
