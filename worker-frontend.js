@@ -138,9 +138,9 @@ function GetRoomList(e){
 }
 
 
-    var url = 'data:application/x-javascript;base64,' + btoa(unescape(encodeURIComponent(a1)));
+    //var url = 'data:application/x-javascript;base64,' + btoa(unescape(encodeURIComponent(a1)));
  //   var worker = new SharedWorker(url);
-
+console.log(btoa(unescape(encodeURIComponent(a1))))
  blob = new Blob([btoa(unescape(encodeURIComponent(a1)))], {type: 'application/javascript'});
  var worker = new SharedWorker(URL.createObjectURL(blob));
 
