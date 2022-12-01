@@ -138,13 +138,13 @@ function GetRoomList(e){
 }
 
 
-    var url = 'blob:data:https://github.dev/application/x-javascript;base64,' + btoa(unescape(encodeURIComponent(a1)));
+  //  var url = 'data:https://github.dev/application/x-javascript;base64,' + btoa(unescape(encodeURIComponent(a1)));
 //!!!  var url = 'blob:https://chaturbate.com/application/x-javascript;base64,' + btoa(unescape(encodeURIComponent(a1)));
   //!! var url = 'blob:https://github.dev/application/x-javascript;base64,' + btoa(unescape(encodeURIComponent(a1)));
     var worker = new SharedWorker(url);
     console.log(11111111111)
- //blob = new Blob([unescape(encodeURIComponent(a1))], {type: 'application/javascript'});
- //var worker = new SharedWorker(URL.createObjectURL(blob));
+ blob = new Blob([unescape(encodeURIComponent(a1))], {type: 'application/javascript'});
+ var worker = new SharedWorker(URL.createObjectURL(blob));
 
      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=worker; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     window.onbeforeunload = function() { // отправять сообщение о закрытии страницы воркеру чтоб удалить порт // вешать событие на закрытие страницы, при возникновении отослать сообщение на закрытие канала
