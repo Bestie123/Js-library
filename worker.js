@@ -142,6 +142,7 @@ console.log(e)
                         connections++;
 
                         port.addEventListener("message", function(e) {
+                            console.log(e);
                             if (letInitializationExtension){
                             console.log(e);
                             LocSwitchPushMessages(e);
